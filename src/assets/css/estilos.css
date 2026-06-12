@@ -1,0 +1,627 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+body {
+  background: #0f172a;
+  color: white;
+}
+
+/* NAVBAR */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 60px;
+  background: #111827;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #22c55e;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+.btn-login {
+  border: 1px solid #22c55e;
+}
+
+.btn-register {
+  background: #22c55e;
+  color: black !important;
+}
+
+/* HERO */
+
+.hero {
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.hero-content h1 {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  text-decoration: none;
+  background: #22c55e;
+  color: black;
+  padding: 15px 35px;
+  border-radius: 12px;
+}
+
+/* FORMULARIOS */
+
+.form-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-card {
+  width: 400px;
+  background: white;
+  color: black;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.form-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  background: #22c55e;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.form-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* DASHBOARD */
+
+.dashboard {
+  padding: 50px;
+}
+
+.dashboard-card {
+  background: white;
+  color: black;
+  padding: 40px;
+  border-radius: 20px;
+}
+
+
+
+
+
+
+/* --- PANTALLA ASISTENTE DE VOZ --- */
+
+.asistente-container {
+  max-width: 600px;
+  /* Ajusta según el tamaño de tu interfaz */
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: sans-serif;
+  text-align: center;
+}
+
+/* Cabecera */
+.asistente-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+.btn-back {
+  background-color: #114c2b;
+  /* Verde oscuro SINCA */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.estado-texto {
+  color: #114c2b;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Contenedor del Micrófono */
+.mic-wrapper {
+  position: relative;
+  /* Clave para que las ondas se posicionen detrás */
+  width: 250px;
+  height: 250px;
+  margin: 0 auto 4rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: #000;
+  /* Fondo negro detrás del micrófono */
+}
+
+/* Botón del Micrófono */
+.mic-btn {
+  position: relative;
+  z-index: 10;
+  /* Se asegura de estar sobre las ondas */
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  border: 10px solid #fff;
+  /* Borde blanco grueso */
+  font-size: 3rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ANIMACIÓN DE ONDAS DE SONIDO */
+.onda {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: 3px solid #b5d5c5;
+  /* Verde claro/grisáceo para la onda */
+  animation: expandir-onda 2s infinite linear;
+  opacity: 0;
+  z-index: 1;
+}
+
+/* Tiempos de retraso para que las ondas salgan una tras otra */
+.onda-1 {
+  animation-delay: 0s;
+}
+
+.onda-2 {
+  animation-delay: 0.6s;
+}
+
+.onda-3 {
+  animation-delay: 1.2s;
+}
+
+@keyframes expandir-onda {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+    border-width: 6px;
+  }
+
+  100% {
+    transform: scale(2.2);
+    /* Hasta qué tamaño crece la onda */
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+/* Caja de Texto Transcrito */
+.transcript-box {
+  background-color: #165c36;
+  /* Verde SINCA */
+  color: white;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 4rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.transcript-box p {
+  margin: 0;
+}
+
+/* Botones de Acción (Cancelar / Enviar) */
+.asistente-acciones {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.btn-cancelar {
+  background-color: #c00020;
+  /* Rojo */
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-enviar {
+  background-color: #000;
+  /* Negro */
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+
+
+
+
+/* --- PÁGINA PRINCIPAL (HOME POST-LOGIN) --- */
+
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  color: #333;
+}
+
+/* 1. Navegación */
+.home-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 2rem;
+  border-bottom: 2px solid #165c36;
+}
+
+.nav-logo h2 {
+  color: #165c36;
+  /* Verde oscuro SINCA */
+  font-size: 1.6rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+/* 2. Hero Section */
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+}
+
+.hero-texto {
+  flex: 1;
+}
+
+.titulo-principal {
+  font-size: 2.2rem;
+  line-height: 1.15;
+  margin: 0 0 0.8rem 0;
+}
+
+.texto-verde {
+  color: #349c64;
+  /* Verde más claro del título */
+}
+
+.subtitulo-hero {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1.2rem;
+}
+
+.hero-botones {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.btn-oscuro {
+  background-color: #165c36;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.hero-imagen {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* 3. Secciones Generales */
+.section-que-busca,
+.section-funcionalidad {
+  padding: 4rem 2rem;
+}
+
+.titulo-seccion {
+  color: #165c36;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.texto-descripcion {
+  color: #666;
+  max-width: 800px;
+  margin-bottom: 3rem;
+  line-height: 1.5;
+}
+
+/* Grid de Tarjetas "¿Qué busca?" */
+.grid-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.tarjeta p {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+/* Sección Funcionalidad */
+.contenedor-funcionalidad {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+}
+
+.funcionalidad-imagen {
+  flex: 1;
+}
+
+.funcionalidad-texto {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.item-funcion h4 {
+  color: #333;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.item-funcion p {
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Cajas temporales para imágenes (Bórralas cuando pongas tus img reales) */
+.img-placeholder-grande {
+  width: 500px;
+  height: 400px;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #999;
+}
+
+.img-placeholder-chica {
+  width: 100%;
+  height: 200px;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+}
+
+.img-placeholder-mediana {
+  width: 100%;
+  height: 350px;
+  background-color: #f6d288;
+  /* Color mostaza de tu imagen */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  border-radius: 8px;
+}
+
+
+/* Ajustes para las imágenes reales */
+.img-hero {
+  max-width: 350px;
+  width: 100%;
+  height: auto;
+}
+
+.img-tarjeta {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  /* Esto hace que la imagen llene el cuadro sin deformarse */
+  border-radius: 8px;
+}
+
+.img-funcionalidad {
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+  border-radius: 8px;
+}
+
+
+
+/* =========================================
+   FORZAR MODO CLARO (FONDO BLANCO) 
+   ========================================= */
+
+body,
+html,
+.home-container {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+}
+
+/* Títulos más oscuros para que resalten */
+.titulo-principal,
+.titulo-seccion,
+h1,
+h2,
+h3,
+h4 {
+  color: #111111 !important;
+}
+
+/* Párrafos y descripciones en gris oscuro */
+.texto-descripcion,
+.subtitulo-hero,
+p {
+  color: #555555 !important;
+}
+
+/* Mantener el color verde corporativo de SINCA */
+.texto-verde {
+  color: #165c36 !important;
+}
+
+/* Para que las tarjetas en "¿Qué busca?" se vean bien en blanco */
+.tarjeta {
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+  color: #333333 !important;
+}
+
+/* =========================================
+   MODOS DE ACCESIBILIDAD GLOBALES
+   ========================================= */
+
+/* 🌙 MODO OSCURO */
+body[data-theme="oscuro"],
+body[data-theme="oscuro"] .min-h-screen,
+body[data-theme="oscuro"] .home-container,
+body[data-theme="oscuro"] header,
+body[data-theme="oscuro"] main {
+  background-color: #1a202c !important;
+  color: #f7fafc !important;
+}
+
+body[data-theme="oscuro"] .bg-white,
+body[data-theme="oscuro"] .bg-gray-50,
+body[data-theme="oscuro"] .tarjeta {
+  background-color: #2d3748 !important;
+  /* Gris muy oscuro para las tarjetas */
+  color: #f7fafc !important;
+  border-color: #4a5568 !important;
+}
+
+body[data-theme="oscuro"] h1,
+body[data-theme="oscuro"] h2,
+body[data-theme="oscuro"] h3,
+body[data-theme="oscuro"] h4,
+body[data-theme="oscuro"] p,
+body[data-theme="oscuro"] span,
+body[data-theme="oscuro"] label,
+body[data-theme="oscuro"] a {
+  color: #e2e8f0 !important;
+}
+
+/* 🌗 MODO ALTO CONTRASTE */
+body[data-theme="alto"],
+body[data-theme="alto"] .min-h-screen,
+body[data-theme="alto"] .home-container,
+body[data-theme="alto"] header,
+body[data-theme="alto"] main {
+  background-color: #000000 !important;
+  color: #facc15 !important;
+  /* Texto amarillo */
+}
+
+body[data-theme="alto"] .bg-white,
+body[data-theme="alto"] .bg-gray-50,
+body[data-theme="alto"] .tarjeta {
+  background-color: #000000 !important;
+  color: #facc15 !important;
+  border: 2px solid #facc15 !important;
+  /* Bordes amarillos marcados */
+}
+
+body[data-theme="alto"] h1,
+body[data-theme="alto"] h2,
+body[data-theme="alto"] h3,
+body[data-theme="alto"] h4,
+body[data-theme="alto"] p,
+body[data-theme="alto"] span,
+body[data-theme="alto"] label,
+body[data-theme="alto"] a {
+  color: #facc15 !important;
+}
+
+/* Forzar que los botones blancos del Login pasen a amarillo en Alto Contraste */
+body[data-theme="alto"] button.bg-white {
+  background-color: #facc15 !important;
+  color: #000000 !important;
+}
