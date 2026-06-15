@@ -8,6 +8,8 @@ import Register from '../pages/Register';
 import VoiceAssistant from '../pages/VoiceAssistant';
 import Accessibility from '../pages/Accessibility'; 
 import LecturaAccesible from '../pages/LecturaAccesible'; 
+import Multimedia from "../pages/Multimedia";
+import Dashboard from '../pages/Dashboard';
 
 function AppRouter() {
   
@@ -28,7 +30,7 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/" element={<Navigate to="/home" />} />
         
         {/* Aquí están todas tus rutas restauradas */}
         <Route path="/login" element={<Login />} />
@@ -37,6 +39,8 @@ function AppRouter() {
         <Route path="/asistente" element={<VoiceAssistant />} />
         <Route path="/accesibilidad" element={<Accessibility />} />
         <Route path="/lectura" element={<LecturaAccesible />} />
+        <Route path="/multimedia" element={<Multimedia />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         
         {/* Ruta de seguridad: si escriben mal la URL, los manda al Login */}
         <Route path="*" element={<Navigate to="/login" />} />

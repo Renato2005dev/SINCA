@@ -88,7 +88,7 @@ const handleTemaChange = (nuevoTema) => {
         <div className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold text-xl flex items-center gap-2`}>
           <span className="text-3xl">❉</span> SINCA
         </div>
-        <button onClick={() => navigate('/home')} className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} flex items-center gap-2 text-base font-bold hover:underline transition-all`}>
+        <button onClick={() => navigate('/dashboard')} className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} flex items-center gap-2 text-base font-bold hover:underline transition-all`}>
           <RiArrowLeftLine className="w-5 h-5" /> Volver al Inicio
         </button>
       </header>

@@ -36,7 +36,9 @@ function Register() {
       {/* HEADER COMPACTO */}
       <header className="flex justify-between items-center px-8 py-3 border-b-2 border-[#165c36]">
         <div className="text-[#165c36] font-bold text-xl flex items-center gap-2">
+          <Link to="/home">
           <span className="text-3xl">❉</span> SINCA
+          </Link>
         </div>
         <button onClick={() => navigate('/login')} className="text-[#165c36] flex items-center gap-2 text-base font-bold hover:underline transition-all">
           <RiArrowLeftLine className="w-5 h-5" /> Volver

@@ -18,7 +18,9 @@ const Home = () => {
       {/* BARRA DE NAVEGACIÓN */}
       <nav className="home-nav">
         <div className="nav-logo">
+          <Link to="/home">
           <h2><span className="logo-icon">❉</span> SINCA</h2>
+          </Link>
         </div>
         <ul className="nav-links">
           <li><a href="#que-busca">¿Qué busca?</a></li>
@@ -36,8 +38,12 @@ const Home = () => {
           </h1>
           <p className="subtitulo-hero">"Pensado para todos, creado para ayudarte"</p>
           <div className="hero-botones">
+            <Link to="/login" >
             <button className="btn-oscuro">Iniciar Sesión</button>
+            </Link>
+            <Link to="/register">
             <button className="btn-oscuro">Regístrate</button>
+            </Link>
           </div>
         </div>
         <div className="hero-imagen">

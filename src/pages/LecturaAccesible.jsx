@@ -14,7 +14,7 @@ const LecturaAccesible = () => {
           <span className="text-3xl">❉</span> SINCA
         </div>
         <button 
-          onClick={() => navigate('/home')} 
+          onClick={() => navigate('/dashboard')} 
           className="text-[#165c36] flex items-center gap-2 text-base font-bold hover:underline transition-all"
         >
           <RiArrowLeftLine className="w-5 h-5" /> Volver al Inicio
