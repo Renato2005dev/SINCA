@@ -1,27 +1,36 @@
+import "../assets/css/estilos.css";
 
-import '../assets/css/estilos.css';
+import heroImg from "../assets/hero-img.png";
+import inclusionImg from "../assets/inclusion.png";
+import accesibilidadImg from "../assets/accesibilidad.png";
+import autonomiaImg from "../assets/autonomia.png";
+import transcripcionImg from "../assets/transcripcion.png";
+import personalizacionImg from "../assets/personalizacion.png";
+import disenoInclusivoImg from "../assets/diseño.png";
 
-// IMPORTAMOS LAS IMÁGENES
-import heroImg from '../assets/hero-img.png';
-import inclusionImg from '../assets/inclusion.png';
-import accesibilidadImg from '../assets/accesibilidad.png';
-import autonomiaImg from '../assets/autonomia.png';
-import transcripcionImg from '../assets/transcripcion.png';
-// 👇 Nuevas imágenes importadas
-import personalizacionImg from '../assets/personalizacion.png'; 
-import disenoInclusivoImg from '../assets/diseño.png';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import {
+  RiLoginBoxLine,
+  RiUserAddLine,
+  RiFacebookCircleFill,
+  RiInstagramLine,
+  RiYoutubeFill,
+  RiLinkedinBoxFill,
+  RiArrowRightSLine,
+  RiMailLine,
+  RiPhoneLine,
+  RiCheckLine,
+} from "react-icons/ri";
+
 const Home = () => {
   return (
     <div className="home-container">
-      
-      {/* BARRA DE NAVEGACIÓN */}
       <nav className="home-nav">
-        <div className="nav-logo">
-          <Link to="/home">
-          <h2><span className="logo-icon">❉</span> SINCA</h2>
-          </Link>
-        </div>
+        <Link to="/home" className="nav-logo">
+          <span className="logo-icon">❉</span>
+          <span>SINCA</span>
+        </Link>
+
         <ul className="nav-links">
           <li><a href="#que-busca">¿Qué busca?</a></li>
           <li><a href="#funcionalidad">Funcionalidad</a></li>
@@ -29,192 +38,164 @@ const Home = () => {
         </ul>
       </nav>
 
-      {/* SECCIÓN HERO (Bienvenida) */}
       <header className="home-hero">
         <div className="hero-texto">
           <h1 className="titulo-principal">
-            <span className="texto-verde">¡Bienvenid@</span><br/>
-            <span className="texto-verde">a SINCA!</span>
+            ¡Bienvenid@ <br /> a SINCA!
           </h1>
-          <p className="subtitulo-hero">"Pensado para todos, creado para ayudarte"</p>
+
+          <p className="subtitulo-hero">
+            "Pensado para todos, creado para ayudarte"
+          </p>
+
           <div className="hero-botones">
-            <Link to="/login" >
-            <button className="btn-oscuro">Iniciar Sesión</button>
+            <Link to="/login">
+              <button className="btn-oscuro">
+                <RiLoginBoxLine />
+                Iniciar Sesión
+              </button>
             </Link>
+
             <Link to="/register">
-            <button className="btn-oscuro">Regístrate</button>
+              <button className="btn-oscuro">
+                <RiUserAddLine />
+                Regístrate
+              </button>
             </Link>
           </div>
         </div>
+
         <div className="hero-imagen">
-          <img src={heroImg} alt="Ilustración de niños aprendiendo" className="img-hero" />
+          <img
+            src={heroImg}
+            alt="Ilustración de inclusión digital"
+            className="img-hero"
+          />
         </div>
       </header>
 
-      {/* SECCIÓN: ¿QUÉ BUSCA? */}
       <section id="que-busca" className="section-que-busca">
-        <h2 className="titulo-seccion">¿Qué busca?</h2>
-        <p className="texto-descripcion">
-          En SINCA creemos que la tecnología debe ser un puente hacia la inclusión, la comunicación y la igualdad de oportunidades para todos. SINCA creemos que la tecnología debe ser un puente hacia la inclusión, la comunicación y la igualdad de oportunidades para todos.
-        </p>
-        
+        <div className="section-header">
+          <h2 className="titulo-seccion">¿Qué busca?</h2>
+          <div className="linea-verde"></div>
+          <p className="texto-descripcion">
+            En SINCA creemos que la tecnología debe ser un puente hacia la
+            inclusión, la comunicación y la igualdad de oportunidades para todos.
+            Por eso, buscamos ofrecer herramientas digitales accesibles, fáciles
+            de usar y adaptadas a diferentes necesidades.
+          </p>
+        </div>
+
         <div className="grid-tarjetas">
           <div className="tarjeta">
             <img src={inclusionImg} alt="Inclusión" className="img-tarjeta" />
-            <p>Fomentar la inclusión tecnológica</p>
+            <h3>Fomentar la inclusión tecnológica</h3>
+            <p>Impulsamos el acceso equitativo a la tecnología para todas las personas.</p>
           </div>
+
           <div className="tarjeta">
             <img src={accesibilidadImg} alt="Accesibilidad" className="img-tarjeta" />
-            <p>Promover la accesibilidad digital</p>
+            <h3>Promover la accesibilidad digital</h3>
+            <p>Desarrollamos soluciones accesibles que eliminan barreras digitales.</p>
           </div>
+
           <div className="tarjeta">
             <img src={autonomiaImg} alt="Autonomía" className="img-tarjeta" />
-            <p>Mejorar la autonomía de los usuarios</p>
+            <h3>Mejorar la autonomía de los usuarios</h3>
+            <p>Diseñamos herramientas que ayudan a las personas a ser más independientes.</p>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN: FUNCIONALIDAD */}
       <section id="funcionalidad" className="section-funcionalidad">
-        <h2 className="titulo-seccion">Funcionalidad</h2>
-        <p className="texto-descripcion">Estas son algunas de las funciones que podrá hacer el usuario</p>
-        
-        {/* BLOQUE 1: Transcripción (Imagen Izquierda, Texto Derecha) */}
-        {/* BLOQUE 1: Transcripción (Imagen Izquierda, Texto Derecha) */}
-        <div className="contenedor-funcionalidad" style={{ marginBottom: '4rem' }}>
-          <div className="funcionalidad-imagen">
-            
-            {/* La etiqueta de apertura del Link */}
-            <Link to="/asistente">
-              
-              {/* La imagen está ADENTRO */}
-              <img 
-                src={transcripcionImg} 
-                alt="Transcripción de audio" 
-                className="img-funcionalidad" 
-                style={{ cursor: 'pointer' }}
-              />
-              
-            {/* La etiqueta de cierre del Link */}
-            </Link>
-            
-          </div>
-          
-          <div className="funcionalidad-texto">
-            <div className="item-funcion">
-              <h4>Transcripción de audio y video para mejorar la comprensión:</h4>
-              <p>Permite convertir contenidos multimedia en texto de manera clara y organizada, facilitando el acceso a la información para personas con discapacidad auditiva o dificultades de comprensión.</p>
-            </div>
-            
-            <div className="item-funcion">
-              <h4>Conversión de voz a texto en tiempo real:</h4>
-              <p>La aplicación transforma automáticamente las palabras habladas en texto instantáneo, mejorando la comunicación y permitiendo una interacción más accesible y dinámica.</p>
-            </div>
-          </div>
+        <div className="section-header">
+          <h2 className="titulo-seccion">Funcionalidad</h2>
+          <div className="linea-verde"></div>
+          <p className="texto-descripcion">
+            Estas son algunas de las funciones que podrá usar el usuario para
+            mejorar su experiencia dentro de SINCA.
+          </p>
         </div>
 
-        {/* Separador visual opcional como en Figma */}
-        <hr style={{ borderTop: '2px solid #165c36', marginBottom: '4rem' }} />
-
-        {/* BLOQUE 2: Personalización "Aa" (Texto Izquierda, Imagen Derecha) */}
-        {/* BLOQUE 2: Personalización "Aa" (Texto Izquierda, Imagen Derecha) */}
-        <div className="contenedor-funcionalidad" style={{ marginBottom: '4rem' }}>
-          <div className="funcionalidad-texto">
-            <div className="item-funcion">
-              <h4>Opciones de personalización de tamaño de texto y contraste visual:</h4>
-              <p>Los usuarios podrán adaptar la interfaz según sus necesidades visuales, ajustando colores, contraste y tamaño de letras para una experiencia más cómoda y accesible.</p>
-            </div>
+        <div className="grid-funcionalidad">
+          <div className="card-funcion">
+            <span className="icono-card">🎙️</span>
+            <img src={transcripcionImg} alt="Transcripción" />
+            <h3>Transcripción inteligente</h3>
+            <p><RiCheckLine /> Transcribe audio y video en texto.</p>
+            <p><RiCheckLine /> Convierte voz a texto en tiempo real.</p>
           </div>
 
-          <div className="funcionalidad-imagen">
-            
-            {/* 👇 Envolvemos la imagen con el Link hacia /accesibilidad */}
-            <Link to="/accesibilidad">
-              <img 
-                src={personalizacionImg} 
-                alt="Personalización de texto" 
-                className="img-funcionalidad" 
-                style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
-              />
-            </Link>
-            
+          <div className="card-funcion">
+            <span className="icono-card">Aa</span>
+            <img src={personalizacionImg} alt="Personalización visual" />
+            <h3>Personalización visual</h3>
+            <p><RiCheckLine /> Ajusta tamaño de texto y contraste.</p>
+            <p><RiCheckLine /> Adapta la interfaz a cada usuario.</p>
           </div>
-        </div>
 
-        <hr style={{ borderTop: '2px solid #165c36', marginBottom: '4rem' }} />
-
-        {/* BLOQUE 3: Diseño Inclusivo (Imagen Izquierda, Texto Derecha) */}
-        {/* BLOQUE 3: Diseño Inclusivo (Imagen Izquierda, Texto Derecha) */}
-        <div className="contenedor-funcionalidad">
-          <div className="funcionalidad-imagen">
-            
-            {/* 👇 Envolvemos la imagen con el Link hacia /lectura */}
-            <Link to="/lectura">
-              <img 
-                src={disenoInclusivoImg} 
-                alt="Diseño Inclusivo" 
-                className="img-funcionalidad" 
-                style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
-              />
-            </Link>
-            
-          </div>
-          
-          <div className="funcionalidad-texto">
-            <div className="item-funcion">
-              <h4>Diseño inclusivo pensado para personas con discapacidad visual, auditiva y motora:</h4>
-              <p>La plataforma será desarrollada bajo principios de accesibilidad y usabilidad, asegurando que cualquier persona pueda interactuar de forma sencilla e intuitiva.</p>
-            </div>
-            
-            <div className="item-funcion">
-              <h4>Interfaz accesible y fácil de usar para todo tipo de usuarios:</h4>
-              <p>Contará con una navegación simple, botones visibles y una estructura organizada que facilite el uso tanto para personas con discapacidad como para adultos mayores y usuarios con poca experiencia tecnológica.</p>
-            </div>
+          <div className="card-funcion">
+            <span className="icono-card">♿</span>
+            <img src={disenoInclusivoImg} alt="Diseño inclusivo" />
+            <h3>Diseño inclusivo</h3>
+            <p><RiCheckLine /> Pensado para discapacidad visual, auditiva y motora.</p>
+            <p><RiCheckLine /> Interfaz clara, simple y accesible.</p>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ marginTop: '6rem', borderTop: '1px solid #ccc', paddingTop: '3rem', paddingBottom: '3rem', display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ flex: 1 }}>
-          <h2 style={{ color: '#165c36', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '2rem' }}>❉</span> SINCA
-          </h2>
-          <p style={{ color: '#666', fontSize: '0.9rem', marginTop: '1rem' }}>Tecnología sin barreras, diseñada para todos.</p>
-        </div>
-        
-        <div style={{ display: 'flex', gap: '4rem', flex: 2, justifyContent: 'flex-end' }}>
+      <footer id="contactos" className="footer-sinca">
+        <div className="footer-grid">
           <div>
-            <h4 style={{ marginBottom: '1rem' }}>Navegación</h4>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Inicio</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Funcionalidades</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Sobre nosotros</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Contacto</a></li>
+            <h2 className="footer-logo">
+              <span>❉</span> SINCA
+            </h2>
+            <p>
+              Tecnología sin barreras, diseñada para todos. Promovemos la
+              inclusión, la accesibilidad y la comunicación para construir un
+              mundo digital más humano.
+            </p>
+          </div>
+
+          <div>
+            <h4>Navegación</h4>
+            <ul>
+              <li><a href="#"><RiArrowRightSLine /> Inicio</a></li>
+              <li><a href="#funcionalidad"><RiArrowRightSLine /> Funcionalidad</a></li>
+              <li><a href="#que-busca"><RiArrowRightSLine /> ¿Qué busca?</a></li>
+              <li><a href="#contactos"><RiArrowRightSLine /> Contactos</a></li>
             </ul>
           </div>
-          
+
           <div>
-            <h4 style={{ marginBottom: '1rem' }}>Recursos</h4>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Declaración de accesibilidad</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Blog</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Soporte</a></li>
+            <h4>Recursos</h4>
+            <ul>
+              <li><a href="#"><RiArrowRightSLine /> Declaración de accesibilidad</a></li>
+              <li><a href="#"><RiArrowRightSLine /> Soporte</a></li>
+              <li><a href="#"><RiArrowRightSLine /> Ayuda</a></li>
+              <li><a href="#"><RiArrowRightSLine /> Preguntas frecuentes</a></li>
             </ul>
           </div>
-          
+
           <div>
-            <h4 style={{ marginBottom: '1rem' }}>Síguenos</h4>
-            <div style={{ display: 'flex', gap: '10px', fontSize: '1.2rem' }}>
-              <span>𝕏</span>
-              <span>📷</span>
-              <span>▶️</span>
-              <span>💼</span>
+            <h4>Síguenos</h4>
+            <div className="social-icons">
+              <RiFacebookCircleFill />
+              <RiInstagramLine />
+              <RiYoutubeFill />
+              <RiLinkedinBoxFill />
             </div>
+
+            <h4 className="contacto-titulo">Contáctanos</h4>
+            <p className="contacto-item"><RiMailLine /> info@sinca.com</p>
+            <p className="contacto-item"><RiPhoneLine /> +51 987 654 321</p>
           </div>
+        </div>
+
+        <div className="footer-copy">
+          © 2026 SINCA. Todos los derechos reservados.
         </div>
       </footer>
-
     </div>
   );
 };

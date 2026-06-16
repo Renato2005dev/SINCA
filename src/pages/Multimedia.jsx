@@ -285,7 +285,7 @@ const Multimedia = () => {
           className="text-[#165c36] flex items-center gap-2 text-base font-bold hover:underline"
         >
           <RiArrowLeftLine className="w-5 h-5" />
-          Volver al Panel
+          Volver al Inicio
         </button>
       </header>
 
