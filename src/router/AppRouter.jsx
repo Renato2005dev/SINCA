@@ -1,4 +1,4 @@
-import { useEffect } from 'react'; 
+import { useEffect, useState } from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // Importamos TODAS tus pantallas
@@ -8,6 +8,7 @@ import Register from '../pages/Register';
 import VoiceAssistant from '../pages/VoiceAssistant';
 import Accessibility from '../pages/Accessibility'; 
 import LecturaAccesible from '../pages/LecturaAccesible'; 
+import ReadingMask from '../components/ReadingMask';
 
 function AppRouter() {
   
@@ -25,8 +26,27 @@ function AppRouter() {
     }
   }, []);
 
+    const [readingMask, setReadingMask] = useState(false);
+
+useEffect(() => {
+  const sync = () => {
+    setReadingMask(
+      localStorage.getItem("sinca-reading-mask") === "true"
+    );
+  };
+
+  sync();
+
+  window.addEventListener("reading-mask-change", sync);
+
+  return () =>
+    window.removeEventListener("reading-mask-change", sync);
+}, []);
+
   return (
+    <>
     <BrowserRouter>
+    {readingMask && <ReadingMask />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         
@@ -42,6 +62,7 @@ function AppRouter() {
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 
