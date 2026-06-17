@@ -59,7 +59,7 @@ function AppRouter() {
       <div id="contenido-principal" className="min-h-screen relative">
         <Routes>
           {/* Mantenemos el redireccionamiento al Login por seguridad */}
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
           
           {/* Rutas de la aplicación base */}
           <Route path="/login" element={<Login />} />

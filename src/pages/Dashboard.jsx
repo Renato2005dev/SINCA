@@ -110,7 +110,7 @@ const Dashboard = () => {
           </div>
 
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/home")}
             className="text-[#165c36] font-bold hover:underline flex items-center gap-1"
           >
             <RiLogoutBoxRLine />
