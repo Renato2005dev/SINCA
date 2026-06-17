@@ -102,7 +102,7 @@ const handleTemaChange = (nuevoTema) => {
         <div className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold text-xl flex items-center gap-2`}>
           <span className="text-3xl">❉</span> SINCA
         </div>
-        <button onClick={() => navigate('/home')} className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} flex items-center gap-2 text-base font-bold hover:underline transition-all`}>
+        <button onClick={() => navigate('/dashboard')} className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} flex items-center gap-2 text-base font-bold hover:underline transition-all`}>
           <RiArrowLeftLine className="w-5 h-5" /> Volver al Inicio
         </button>
       </header>
@@ -111,7 +111,7 @@ const handleTemaChange = (nuevoTema) => {
         <div className="w-full max-w-2xl space-y-4">
           
           <div className="flex items-start gap-3">
-            <button onClick={() => navigate('/home')} className="w-9 h-9 rounded-lg bg-[#27500A] flex items-center justify-center shrink-0 mt-0.5 hover:bg-[#3B6D11]">
+            <button onClick={() => navigate('/dashboard')} className="w-9 h-9 rounded-lg bg-[#27500A] flex items-center justify-center shrink-0 mt-0.5 hover:bg-[#3B6D11]">
               <RiArrowLeftLine className="w-5 h-5 text-white" />
             </button>
             <div>

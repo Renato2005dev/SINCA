@@ -2,16 +2,26 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase'; // Asegúrate de que esta ruta a firebase.js sea correcta
-import '../assets/css/estilos.css';
+import "../assets/css/estilos.css";
 
-// IMPORTAMOS LAS IMÁGENES
-import heroImg from '../assets/hero-img.png';
-import inclusionImg from '../assets/inclusion.png';
-import accesibilidadImg from '../assets/accesibilidad.png';
-import autonomiaImg from '../assets/autonomia.png';
-import transcripcionImg from '../assets/transcripcion.png';
-import personalizacionImg from '../assets/personalizacion.png'; 
-import disenoInclusivoImg from '../assets/diseño.png';
+import heroImg from "../assets/hero-img.png";
+import inclusionImg from "../assets/inclusion.png";
+import accesibilidadImg from "../assets/accesibilidad.png";
+import autonomiaImg from "../assets/autonomia.png";
+import transcripcionImg from "../assets/transcripcion.png";
+import personalizacionImg from "../assets/personalizacion.png";
+import disenoInclusivoImg from "../assets/diseño.png";
+
+import {
+  RiFacebookCircleFill,
+  RiInstagramLine,
+  RiYoutubeFill,
+  RiLinkedinBoxFill,
+  RiArrowRightSLine,
+  RiMailLine,
+  RiPhoneLine,
+  RiCheckLine,
+} from "react-icons/ri";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,11 +34,9 @@ const Home = () => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
         // Si no hay usuario activo, lo manda al login. 
-        // El "replace: true" borra el historial para que la flecha de retroceso no funcione.
         navigate('/login', { replace: true });
       } else {
         // 👇 PASO B.2: Si hay usuario, extraemos su nombre de Firebase
-        // Solo tomamos el primer nombre para que se vea mejor (Ej: "Juan Pérez" -> "Juan")
         const nombreCompleto = user.displayName;
         const primerNombre = nombreCompleto ? nombreCompleto.split(' ')[0] : '';
         setNombreUsuario(primerNombre);
@@ -43,7 +51,6 @@ const Home = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      // Tras cerrar sesión, lo enviamos al login y borramos el historial
       navigate('/login', { replace: true });
     } catch (error) {
       console.error("Error al cerrar sesión:", error.message);
@@ -52,20 +59,19 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      
-      {/* BARRA DE NAVEGACIÓN */}
       <nav className="home-nav">
+        {/* DISEÑO DE TIFANY PARA EL LOGO */}
         <div className="nav-logo">
-          <h2><span className="logo-icon">❉</span> SINCA</h2>
+          <span className="logo-icon">❉</span>
+          <span>SINCA</span>
         </div>
-        
-        {/* Usamos flex y items-center para alinear los enlaces con el botón nuevo */}
+
         <ul className="nav-links flex items-center gap-6">
           <li><a href="#que-busca">¿Qué busca?</a></li>
           <li><a href="#funcionalidad">Funcionalidad</a></li>
           <li><a href="#contactos">Contactos</a></li>
           
-          {/* BOTÓN DE CERRAR SESIÓN EN LA NAVEGACIÓN */}
+          {/* BOTÓN DE CERRAR SESIÓN DE RENATO */}
           <li>
             <button 
               onClick={handleLogout}
@@ -77,172 +83,157 @@ const Home = () => {
         </ul>
       </nav>
 
-      {/* SECCIÓN HERO (Bienvenida) */}
       <header className="home-hero">
         <div className="hero-texto">
           <h1 className="titulo-principal">
-            {/* 👇 PASO B.3: Mostramos el nombre dinámico aquí. 
-                 Si no hay nombre, mostrará solo "¡Bienvenid@!" */}
+            {/* SALUDO DINÁMICO DE RENATO APLICADO AL DISEÑO */}
             <span className="texto-verde">
               ¡Bienvenid@{nombreUsuario ? ` ${nombreUsuario}` : ''}!
             </span><br/>
             <span className="texto-verde">a SINCA</span>
           </h1>
-          <p className="subtitulo-hero">"Pensado para todos, creado para ayudarte"</p>
+
+          <p className="subtitulo-hero">
+            "Pensado para todos, creado para ayudarte"
+          </p>
           
+          {/* BOTONES DE INICIAR SESIÓN Y REGISTRO ELIMINADOS POR SEGURIDAD DE RENATO */}
         </div>
+
         <div className="hero-imagen">
-          <img src={heroImg} alt="Ilustración de niños aprendiendo" className="img-hero" />
+          <img
+            src={heroImg}
+            alt="Ilustración de inclusión digital"
+            className="img-hero"
+          />
         </div>
       </header>
 
-      {/* SECCIÓN: ¿QUÉ BUSCA? */}
+      {/* DISEÑO MEJORADO DE TIFANY PARA LAS SECCIONES */}
       <section id="que-busca" className="section-que-busca">
-        <h2 className="titulo-seccion">¿Qué busca?</h2>
-        <p className="texto-descripcion">
-          En SINCA creemos que la tecnología debe ser un puente hacia la inclusión, la comunicación y la igualdad de oportunidades para todos. SINCA creemos que la tecnología debe ser un puente hacia la inclusión, la comunicación y la igualdad de oportunidades para todos.
-        </p>
-        
+        <div className="section-header">
+          <h2 className="titulo-seccion">¿Qué busca?</h2>
+          <div className="linea-verde"></div>
+          <p className="texto-descripcion">
+            En SINCA creemos que la tecnología debe ser un puente hacia la
+            inclusión, la comunicación y la igualdad de oportunidades para todos.
+            Por eso, buscamos ofrecer herramientas digitales accesibles, fáciles
+            de usar y adaptadas a diferentes necesidades.
+          </p>
+        </div>
+
         <div className="grid-tarjetas">
           <div className="tarjeta">
             <img src={inclusionImg} alt="Inclusión" className="img-tarjeta" />
-            <p>Fomentar la inclusión tecnológica</p>
+            <h3>Fomentar la inclusión tecnológica</h3>
+            <p>Impulsamos el acceso equitativo a la tecnología para todas las personas.</p>
           </div>
+
           <div className="tarjeta">
             <img src={accesibilidadImg} alt="Accesibilidad" className="img-tarjeta" />
-            <p>Promover la accesibilidad digital</p>
+            <h3>Promover la accesibilidad digital</h3>
+            <p>Desarrollamos soluciones accesibles que eliminan barreras digitales.</p>
           </div>
+
           <div className="tarjeta">
             <img src={autonomiaImg} alt="Autonomía" className="img-tarjeta" />
-            <p>Mejorar la autonomía de los usuarios</p>
+            <h3>Mejorar la autonomía de los usuarios</h3>
+            <p>Diseñamos herramientas que ayudan a las personas a ser más independientes.</p>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN: FUNCIONALIDAD */}
       <section id="funcionalidad" className="section-funcionalidad">
-        <h2 className="titulo-seccion">Funcionalidad</h2>
-        <p className="texto-descripcion">Estas son algunas de las funciones que podrá hacer el usuario</p>
-        
-        {/* BLOQUE 1: Transcripción */}
-        <div className="contenedor-funcionalidad" style={{ marginBottom: '4rem' }}>
-          <div className="funcionalidad-imagen">
-            <Link to="/asistente">
-              <img 
-                src={transcripcionImg} 
-                alt="Transcripción de audio" 
-                className="img-funcionalidad" 
-                style={{ cursor: 'pointer' }}
-              />
-            </Link>
-          </div>
-          
-          <div className="funcionalidad-texto">
-            <div className="item-funcion">
-              <h4>Transcripción de audio y video para mejorar la comprensión:</h4>
-              <p>Permite convertir contenidos multimedia en texto de manera clara y organizada, facilitando el acceso a la información para personas con discapacidad auditiva o dificultades de comprensión.</p>
-            </div>
-            
-            <div className="item-funcion">
-              <h4>Conversión de voz a texto en tiempo real:</h4>
-              <p>La aplicación transforma automáticamente las palabras habladas en texto instantáneo, mejorando la comunicación y permitiendo una interacción más accesible y dinámica.</p>
-            </div>
-          </div>
+        <div className="section-header">
+          <h2 className="titulo-seccion">Funcionalidad</h2>
+          <div className="linea-verde"></div>
+          <p className="texto-descripcion">
+            Estas son algunas de las funciones que podrá usar el usuario para
+            mejorar su experiencia dentro de SINCA.
+          </p>
         </div>
 
-        <hr style={{ borderTop: '2px solid #165c36', marginBottom: '4rem' }} />
+        <div className="grid-funcionalidad">
+          {/* Envolvemos las tarjetas de Tifany con los Links de navegación de Renato */}
+          <Link to="/asistente" className="card-funcion block hover:shadow-lg transition-shadow cursor-pointer">
+            <span className="icono-card">🎙️</span>
+            <img src={transcripcionImg} alt="Transcripción" />
+            <h3>Transcripción inteligente</h3>
+            <p><RiCheckLine className="inline" /> Transcribe audio y video en texto.</p>
+            <p><RiCheckLine className="inline" /> Convierte voz a texto en tiempo real.</p>
+          </Link>
 
-        {/* BLOQUE 2: Personalización */}
-        <div className="contenedor-funcionalidad" style={{ marginBottom: '4rem' }}>
-          <div className="funcionalidad-texto">
-            <div className="item-funcion">
-              <h4>Opciones de personalización de tamaño de texto y contraste visual:</h4>
-              <p>Los usuarios podrán adaptar la interfaz según sus necesidades visuales, ajustando colores, contraste y tamaño de letras para una experiencia más cómoda y accesible.</p>
-            </div>
-          </div>
+          <Link to="/accesibilidad" className="card-funcion block hover:shadow-lg transition-shadow cursor-pointer">
+            <span className="icono-card">Aa</span>
+            <img src={personalizacionImg} alt="Personalización visual" />
+            <h3>Personalización visual</h3>
+            <p><RiCheckLine className="inline" /> Ajusta tamaño de texto y contraste.</p>
+            <p><RiCheckLine className="inline" /> Adapta la interfaz a cada usuario.</p>
+          </Link>
 
-          <div className="funcionalidad-imagen">
-            <Link to="/accesibilidad">
-              <img 
-                src={personalizacionImg} 
-                alt="Personalización de texto" 
-                className="img-funcionalidad" 
-                style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
-              />
-            </Link>
-          </div>
-        </div>
-
-        <hr style={{ borderTop: '2px solid #165c36', marginBottom: '4rem' }} />
-
-        {/* BLOQUE 3: Diseño Inclusivo */}
-        <div className="contenedor-funcionalidad">
-          <div className="funcionalidad-imagen">
-            <Link to="/lectura">
-              <img 
-                src={disenoInclusivoImg} 
-                alt="Diseño Inclusivo" 
-                className="img-funcionalidad" 
-                style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
-              />
-            </Link>
-          </div>
-          
-          <div className="funcionalidad-texto">
-            <div className="item-funcion">
-              <h4>Diseño inclusivo pensado para personas con discapacidad visual, auditiva y motora:</h4>
-              <p>La plataforma será desarrollada bajo principios de accesibilidad y usabilidad, asegurando que cualquier persona pueda interactuar de forma sencilla e intuitiva.</p>
-            </div>
-            
-            <div className="item-funcion">
-              <h4>Interfaz accesible y fácil de usar para todo tipo de usuarios:</h4>
-              <p>Contará con una navegación simple, botones visibles y una estructura organizada que facilite el uso tanto para personas con discapacidad como para adultos mayores y usuarios con poca experiencia tecnológica.</p>
-            </div>
-          </div>
+          <Link to="/lectura" className="card-funcion block hover:shadow-lg transition-shadow cursor-pointer">
+            <span className="icono-card">♿</span>
+            <img src={disenoInclusivoImg} alt="Diseño inclusivo" />
+            <h3>Diseño inclusivo</h3>
+            <p><RiCheckLine className="inline" /> Pensado para discapacidad visual, auditiva y motora.</p>
+            <p><RiCheckLine className="inline" /> Interfaz clara, simple y accesible.</p>
+          </Link>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{ marginTop: '6rem', borderTop: '1px solid #ccc', paddingTop: '3rem', paddingBottom: '3rem', display: 'flex', justifyContent: 'space-between' }}>
-        <div style={{ flex: 1 }}>
-          <h2 style={{ color: '#165c36', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '2rem' }}>❉</span> SINCA
-          </h2>
-          <p style={{ color: '#666', fontSize: '0.9rem', marginTop: '1rem' }}>Tecnología sin barreras, diseñada para todos.</p>
-        </div>
-        
-        <div style={{ display: 'flex', gap: '4rem', flex: 2, justifyContent: 'flex-end' }}>
+      {/* FOOTER DE TIFANY */}
+      <footer id="contactos" className="footer-sinca">
+        <div className="footer-grid">
           <div>
-            <h4 style={{ marginBottom: '1rem' }}>Navegación</h4>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Inicio</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Funcionalidades</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Sobre nosotros</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Contacto</a></li>
+            <h2 className="footer-logo">
+              <span>❉</span> SINCA
+            </h2>
+            <p>
+              Tecnología sin barreras, diseñada para todos. Promovemos la
+              inclusión, la accesibilidad y la comunicación para construir un
+              mundo digital más humano.
+            </p>
+          </div>
+
+          <div>
+            <h4>Navegación</h4>
+            <ul>
+              <li><a href="#"><RiArrowRightSLine /> Inicio</a></li>
+              <li><a href="#funcionalidad"><RiArrowRightSLine /> Funcionalidad</a></li>
+              <li><a href="#que-busca"><RiArrowRightSLine /> ¿Qué busca?</a></li>
+              <li><a href="#contactos"><RiArrowRightSLine /> Contactos</a></li>
             </ul>
           </div>
-          
+
           <div>
-            <h4 style={{ marginBottom: '1rem' }}>Recursos</h4>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Declaración de accesibilidad</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Blog</a></li>
-              <li><a href="#" style={{ color: '#333', textDecoration: 'none' }}>Soporte</a></li>
+            <h4>Recursos</h4>
+            <ul>
+              <li><a href="#"><RiArrowRightSLine /> Declaración de accesibilidad</a></li>
+              <li><a href="#"><RiArrowRightSLine /> Soporte</a></li>
+              <li><a href="#"><RiArrowRightSLine /> Ayuda</a></li>
+              <li><a href="#"><RiArrowRightSLine /> Preguntas frecuentes</a></li>
             </ul>
           </div>
-          
+
           <div>
-            <h4 style={{ marginBottom: '1rem' }}>Síguenos</h4>
-            <div style={{ display: 'flex', gap: '10px', fontSize: '1.2rem' }}>
-              <span>𝕏</span>
-              <span>📷</span>
-              <span>▶️</span>
-              <span>💼</span>
+            <h4>Síguenos</h4>
+            <div className="social-icons">
+              <RiFacebookCircleFill />
+              <RiInstagramLine />
+              <RiYoutubeFill />
+              <RiLinkedinBoxFill />
             </div>
+
+            <h4 className="contacto-titulo">Contáctanos</h4>
+            <p className="contacto-item"><RiMailLine /> info@sinca.com</p>
+            <p className="contacto-item"><RiPhoneLine /> +51 987 654 321</p>
           </div>
+        </div>
+
+        <div className="footer-copy">
+          © 2026 SINCA. Todos los derechos reservados.
         </div>
       </footer>
-
     </div>
   );
 };

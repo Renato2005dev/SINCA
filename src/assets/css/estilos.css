@@ -302,52 +302,86 @@ body {
 
 /* --- PÁGINA PRINCIPAL (HOME POST-LOGIN) --- */
 
-.home-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  font-family: sans-serif;
-  color: #333;
+body,
+html {
+  width: 100%;
+  overflow-x: hidden;
 }
 
-/* 1. Navegación */
+.home-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff !important;
+  color: #343A40 !important;
+  font-family: Arial, sans-serif;
+}
+
+/* NAV HOME */
+
 .home-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 2rem;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
   border-bottom: 2px solid #165c36;
+  padding: 1rem 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  color: #165c36 !important;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 1.7rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .nav-logo h2 {
-  color: #165c36;
-  /* Verde oscuro SINCA */
-  font-size: 1.6rem;
+  color: #165c36 !important;
   margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-size: 1.7rem;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  color: #165c36 !important;
 }
 
 .nav-links {
-  list-style: none;
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
+  list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .nav-links a {
+  color: #000000 !important;
   text-decoration: none;
-  color: #333;
-  font-weight: bold;
+  font-weight: 800;
+  font-size: 1rem;
 }
 
-/* 2. Hero Section */
+.nav-links a:hover {
+  color: #165c36 !important;
+}
+
+/* HERO */
+
 .home-hero {
+  width: 100%;
+  min-height: 82vh;
+  padding: 4rem 8%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem;
+  gap: 4rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f7fbf8 55%, #edf7f2 100%);
 }
 
 .hero-texto {
@@ -355,206 +389,344 @@ body {
 }
 
 .titulo-principal {
-  font-size: 2.2rem;
-  line-height: 1.15;
-  margin: 0 0 0.8rem 0;
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1.05;
+  font-weight: 900;
+  color: #165c36 !important;
+  margin-bottom: 1.5rem;
 }
 
 .texto-verde {
-  color: #349c64;
-  /* Verde más claro del título */
+  color: #165c36 !important;
 }
 
 .subtitulo-hero {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 1.2rem;
+  font-size: 1.3rem;
+  color: #343A40 !important;
+  margin-bottom: 2rem;
 }
 
 .hero-botones {
   display: flex;
-  gap: 0.8rem;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .btn-oscuro {
-  background-color: #165c36;
-  color: white;
+  background: #165c36;
+  color: white !important;
   border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
-  font-weight: bold;
+  padding: 1rem 1.7rem;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 1rem;
   cursor: pointer;
-  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-oscuro:hover {
+  background: #14452F;
+  transform: translateY(-2px);
 }
 
 .hero-imagen {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
-/* 3. Secciones Generales */
+.img-hero {
+  width: 100%;
+  max-width: 650px;
+  object-fit: contain;
+}
+
+/* SECCIONES */
+
 .section-que-busca,
 .section-funcionalidad {
-  padding: 4rem 2rem;
+  width: 100%;
+  padding: 6rem 8%;
+}
+
+.section-funcionalidad {
+  background: linear-gradient(180deg, #f7fbf8 0%, #ffffff 100%);
+}
+
+.section-header {
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto 4rem;
 }
 
 .titulo-seccion {
-  color: #165c36;
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  color: #000000 !important;
+  font-weight: 900;
+  margin-bottom: 0.8rem;
+}
+
+.linea-verde {
+  width: 55px;
+  height: 4px;
+  background: #165c36;
+  margin: 0 auto 1.5rem;
+  border-radius: 10px;
 }
 
 .texto-descripcion {
-  color: #666;
-  max-width: 800px;
-  margin-bottom: 3rem;
-  line-height: 1.5;
+  color: #343A40 !important;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  max-width: 850px;
+  margin: 0 auto 3rem;
 }
 
-/* Grid de Tarjetas "¿Qué busca?" */
+/* TARJETAS ¿QUÉ BUSCA? */
+
 .grid-tarjetas {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.8rem;
 }
 
-.tarjeta p {
+.tarjeta {
+  background: #ffffff !important;
+  border-radius: 24px;
+  padding: 2rem;
   text-align: center;
-  font-weight: bold;
-  margin-top: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid #e5e7eb !important;
+  transition: 0.3s;
 }
 
-/* Sección Funcionalidad */
-.contenedor-funcionalidad {
-  display: flex;
-  align-items: center;
-  gap: 4rem;
-}
-
-.funcionalidad-imagen {
-  flex: 1;
-}
-
-.funcionalidad-texto {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.item-funcion h4 {
-  color: #333;
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.item-funcion p {
-  color: #666;
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Cajas temporales para imágenes (Bórralas cuando pongas tus img reales) */
-.img-placeholder-grande {
-  width: 500px;
-  height: 400px;
-  background-color: #e9ecef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  color: #999;
-}
-
-.img-placeholder-chica {
-  width: 100%;
-  height: 200px;
-  background-color: #e9ecef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-}
-
-.img-placeholder-mediana {
-  width: 100%;
-  height: 350px;
-  background-color: #f6d288;
-  /* Color mostaza de tu imagen */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #999;
-  border-radius: 8px;
-}
-
-
-/* Ajustes para las imágenes reales */
-.img-hero {
-  max-width: 350px;
-  width: 100%;
-  height: auto;
+.tarjeta:hover {
+  transform: translateY(-8px);
 }
 
 .img-tarjeta {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  /* Esto hace que la imagen llene el cuadro sin deformarse */
-  border-radius: 8px;
+  max-width: 210px;
+  height: 210px;
+  object-fit: contain;
+  margin-bottom: 1.3rem;
+  border-radius: 16px;
 }
 
-.img-funcionalidad {
-  width: 100%;
-  max-width: 450px;
-  height: auto;
-  border-radius: 8px;
-}
-
-
-
-/* =========================================
-   FORZAR MODO CLARO (FONDO BLANCO) 
-   ========================================= */
-
-body,
-html,
-.home-container {
-  background-color: #ffffff !important;
-  color: #333333 !important;
-}
-
-/* Títulos más oscuros para que resalten */
-.titulo-principal,
-.titulo-seccion,
-h1,
-h2,
-h3,
-h4 {
-  color: #111111 !important;
-}
-
-/* Párrafos y descripciones en gris oscuro */
-.texto-descripcion,
-.subtitulo-hero,
-p {
-  color: #555555 !important;
-}
-
-/* Mantener el color verde corporativo de SINCA */
-.texto-verde {
+.tarjeta h3 {
   color: #165c36 !important;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
 }
 
-/* Para que las tarjetas en "¿Qué busca?" se vean bien en blanco */
-.tarjeta {
-  background-color: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
-  color: #333333 !important;
+.tarjeta p {
+  color: #555555 !important;
+  line-height: 1.6;
+  font-weight: normal;
 }
 
+/* FUNCIONALIDAD */
+
+.grid-funcionalidad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.8rem;
+}
+
+.card-funcion {
+  position: relative;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.card-funcion img {
+  width: 100%;
+  max-width: 230px;
+  height: 180px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1.5rem;
+}
+
+.icono-card {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: #165c36;
+  color: white !important;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1.3rem;
+}
+
+.card-funcion h3 {
+  color: #165c36 !important;
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.card-funcion p {
+  display: flex;
+  gap: 8px;
+  color: #343A40 !important;
+  line-height: 1.6;
+}
+
+.card-funcion svg {
+  color: #165c36;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+/* FOOTER */
+
+.footer-sinca {
+  background: #14452F;
+  color: white !important;
+  padding: 5rem 8% 2rem;
+  border-radius: 40px 40px 0 0;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.2fr;
+  gap: 3rem;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: white !important;
+}
+
+.footer-sinca p {
+  color: #DDE7DF !important;
+  line-height: 1.7;
+}
+
+.footer-sinca h4 {
+  color: white !important;
+  margin-bottom: 1rem;
+}
+
+.footer-sinca ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-sinca li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-sinca a {
+  color: #DDE7DF !important;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.footer-sinca a:hover {
+  color: white !important;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-icons svg {
+  color: white;
+}
+
+.contacto-titulo {
+  margin-top: 1.5rem;
+}
+
+.contacto-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-copy {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  text-align: center;
+  color: #DDE7DF !important;
+  font-size: 0.9rem;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+  .home-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 4rem 5%;
+  }
+
+  .hero-botones {
+    justify-content: center;
+  }
+
+  .grid-tarjetas,
+  .grid-funcionalidad {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-nav {
+    padding: 1rem 5%;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .section-que-busca,
+  .section-funcionalidad {
+    padding: 4rem 5%;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-sinca a,
+  .contacto-item,
+  .social-icons {
+    justify-content: center;
+  }
+
+  .img-hero {
+    max-width: 420px;
+  }
+}
 /* =========================================
    MODOS DE ACCESIBILIDAD GLOBALES
    ========================================= */

@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'; 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// Importamos TODAS tus pantallas
+// Importamos TODAS tus pantallas base
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import VoiceAssistant from '../pages/VoiceAssistant';
 import Accessibility from '../pages/Accessibility'; 
 import LecturaAccesible from '../pages/LecturaAccesible'; 
-import ReadingMask from '../components/ReadingMask';
 
-// IMPORTAMOS EL LECTOR AQUÍ
+// Importaciones de Renato y Daylee (Accesibilidad)
+import ReadingMask from '../components/ReadingMask';
 import LectorAccesible from '../components/LectorAccesible';
+
+// Importaciones de Tifany (Nuevas pantallas)
+import Multimedia from "../pages/Multimedia";
+import Dashboard from '../pages/Dashboard';
 
 function AppRouter() {
   
@@ -45,7 +49,7 @@ function AppRouter() {
       window.removeEventListener("reading-mask-change", sync);
   }, []);
 
-  // 👇 UN SOLO RETURN LIMPIO Y ORDENADO
+  // 👇 UN SOLO RETURN LIMPIO Y ORDENADO CON TODO INTEGRADO
   return (
     <BrowserRouter>
       {/* Componente de Daylee agregado antes del contenedor principal */}
@@ -54,15 +58,20 @@ function AppRouter() {
       {/* Tu contenedor principal para el lector */}
       <div id="contenido-principal" className="min-h-screen relative">
         <Routes>
+          {/* Mantenemos el redireccionamiento al Login por seguridad */}
           <Route path="/" element={<Navigate to="/login" />} />
           
-          {/* Rutas de la aplicación */}
+          {/* Rutas de la aplicación base */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
           <Route path="/asistente" element={<VoiceAssistant />} />
           <Route path="/accesibilidad" element={<Accessibility />} />
           <Route path="/lectura" element={<LecturaAccesible />} />
+          
+          {/* 👇 Las nuevas rutas agregadas por Tifany */}
+          <Route path="/multimedia" element={<Multimedia />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           
           {/* Ruta de seguridad */}
           <Route path="*" element={<Navigate to="/login" />} />
