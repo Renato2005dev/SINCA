@@ -1,2 +1,29 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
+
+
+/* ==========================
+   MÁSCARA DE LECTURA
+========================== */
+
+.reading-mask-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.reading-mask-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+  pointer-events: none;
+}

@@ -1,4 +1,4 @@
-import { RiArrowLeftLine, RiBrainLine, RiClosedCaptioningFill, RiContrastFill, RiMoonFill, RiRefreshLine, RiSunLine } from "react-icons/ri";
+import { RiArrowLeftLine, RiBrainLine, RiClosedCaptioningFill, RiContrastFill, RiMoonFill, RiQrScanLine, RiRefreshLine, RiSunLine } from "react-icons/ri";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,12 @@ const Accessibility = () => {
   const [sliderValue, setSliderValue] = useState(() => Number(localStorage.getItem("sinca-fontSize")) || 16);
   const [apariencia, setApariencia] = useState(() => localStorage.getItem("sinca-theme") || "normal");
   const [subtitulos, setSubtitulos] = useState(() => localStorage.getItem("sinca-subs") === "true" || true);
-  const [modoSimple, setModoSimple] = useState(() => localStorage.getItem("sinca-modo") === "true" || true);
+  const [modoSimple, setModoSimple] = useState(
+    () => localStorage.getItem("sinca-modo") === "true",
+  );
+  const [readingMask, setReadingMask] = useState(
+    () => localStorage.getItem("sinca-reading-mask") === "true",
+  );
   
   const navigate = useNavigate();
 
@@ -54,10 +59,19 @@ const handleTemaChange = (nuevoTema) => {
     setSliderValue(16);
     setApariencia("normal");
     setSubtitulos(true);
-    setModoSimple(true);
+    setModoSimple(false);
+    setReadingMask(false);
     document.documentElement.style.fontSize = "16px";
     document.body.removeAttribute('data-theme'); // Quita el modo oscuro/alto contraste
     localStorage.clear();
+    window.dispatchEvent(new Event("reading-mask-change"));
+  };
+
+  //nuevo
+  const handleReadingMaskChange = (valor) => {
+    setReadingMask(valor);
+    localStorage.setItem("sinca-reading-mask", String(valor));
+    window.dispatchEvent(new Event("reading-mask-change"));
   };
 
   // Clases dinámicas
@@ -183,6 +197,30 @@ const handleTemaChange = (nuevoTema) => {
                 <p className="text-sm font-semibold">Modo simplificado</p>
               </div>
               <Toggle checked={modoSimple} onChange={handleModoChange} />
+            </div>
+          </div>
+
+          {/* Nuevo bloque para Reading Mask */}
+          <div className={`border rounded-xl p-5 ${card}`}>
+            <h2 className="text-sm font-semibold mb-3 text-[#27500A]">
+              {" "}
+              Máscara de lectura
+            </h2>
+            <div className="flex items-center gap-3">
+              <div
+                className={`w-9 h-9 rounded-lg flex items-center justify-center ${apariencia === "normal" ? "bg-green-100" : "bg-green-700"}`}
+              >
+                <RiQrScanLine className={`w-5 h-5 ${textMuted}`} />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold">
+                  Activar guía de lectura
+                </p>
+              </div>
+              <Toggle
+                checked={readingMask}
+                onChange={handleReadingMaskChange}
+              />
             </div>
           </div>
 
