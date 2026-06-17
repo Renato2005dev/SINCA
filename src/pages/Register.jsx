@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+// 👇 Importamos updateProfile para guardar el nombre
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'; 
 import { auth } from '../firebase';
 import { RiArrowLeftLine, RiEyeOffLine, RiEyeLine } from 'react-icons/ri';
 
@@ -14,17 +15,17 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 1. Esto es lo que crea el usuario en Firebase (y ya lo hace bien)
-      await createUserWithEmailAndPassword(auth, correo, contraseña);
+      // 1. Creamos el usuario en Firebase
+      const userCredential = await createUserWithEmailAndPassword(auth, correo, contraseña);
       
-      // 2. Si llega aquí, es que SÍ se creó. 
-      // ¡No llames al alert de error! 
+      // 👇 2. Guardamos el nombre en su perfil de Firebase
+      await updateProfile(userCredential.user, {
+        displayName: nombre
+      });
+      
       alert("¡Cuenta creada exitosamente!");
-      
-      // 3. Redirige al usuario al Login o al Home
       navigate('/login'); 
     } catch (error) {
-      // Solo entra aquí si realmente hubo un error (ej. contraseña muy corta)
       console.error(error);
       alert("Hubo un error al registrarte.");
     }
@@ -32,8 +33,6 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
-      
-      {/* HEADER COMPACTO */}
       <header className="flex justify-between items-center px-8 py-3 border-b-2 border-[#165c36]">
         <div className="text-[#165c36] font-bold text-xl flex items-center gap-2">
           <span className="text-3xl">❉</span> SINCA
@@ -43,19 +42,14 @@ function Register() {
         </button>
       </header>
 
-      {/* CONTENEDOR CENTRAL COMPACTO */}
       <main className="flex-1 flex items-center justify-center p-6 bg-gray-50">
-        
-        {/* CAJA VERDE AJUSTADA */}
         <div className="bg-[#165c36] w-[450px] max-w-[95vw] h-auto rounded-[30px] p-10 shadow-2xl flex flex-col justify-center">
-          
           <div className="text-center mb-6">
             <div className="text-white text-6xl mb-2 flex justify-center">❉</div>
             <h2 className="text-white text-3xl font-extrabold tracking-wide">Registrarse</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 w-full px-2">
-            
             <div className="w-full">
               <label className="block text-white text-sm font-semibold mb-1 ml-4">Nombre completo:</label>
               <input 
@@ -112,7 +106,6 @@ function Register() {
             <span className="opacity-90">¿Ya tienes cuenta?</span>
             <Link to="/login" className="hover:underline font-bold text-base">Iniciar Sesión</Link>
           </div>
-
         </div>
       </main>
     </div>

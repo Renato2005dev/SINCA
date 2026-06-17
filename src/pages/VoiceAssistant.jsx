@@ -29,13 +29,13 @@ const VoiceAssistant = () => {
         </button>
       </header>
 
-      {/* CONTENIDO DEL ASISTENTE */}
-      <div className="asistente-container flex-1 flex flex-col items-center pt-10">
+     {/* CONTENIDO DEL ASISTENTE */}
+      <div id="contenido-principal" className="asistente-container flex-1 flex flex-col items-center pt-10">
         
         <h3 className="estado-texto font-bold text-xl mb-12">
           {isListening ? 'Estado: Escuchando...' : 'Estado: Pausado'}
         </h3>
-
+        
         {/* Círculo central con el micrófono y las ondas animadas */}
         <div className="mic-wrapper my-10">
           {/* Las ondas solo se renderizan si está escuchando */}

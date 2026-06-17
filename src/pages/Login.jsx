@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import { RiArrowLeftLine, RiEyeOffLine, RiEyeLine } from 'react-icons/ri';
+import { RiEyeOffLine, RiEyeLine } from 'react-icons/ri'; // Quitamos RiArrowLeftLine
 
 function Login() {
   const [correo, setCorreo] = useState('');
@@ -24,14 +24,12 @@ function Login() {
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
       
-      {/* HEADER COMPACTO */}
+      {/* HEADER COMPACTO (Sin el botón Volver) */}
       <header className="flex justify-between items-center px-8 py-3 border-b-2 border-[#165c36]">
         <div className="text-[#165c36] font-bold text-xl flex items-center gap-2">
           <span className="text-3xl">❉</span> SINCA
         </div>
-        <button onClick={() => navigate('/home')} className="text-[#165c36] flex items-center gap-2 text-base font-bold hover:underline transition-all">
-          <RiArrowLeftLine className="w-5 h-5" /> Volver
-        </button>
+        {/* El botón de volver fue eliminado para forzar el inicio de sesión */}
       </header>
 
       {/* CONTENEDOR CENTRAL COMPACTO */}

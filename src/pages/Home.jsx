@@ -1,4 +1,7 @@
-
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase'; // Asegúrate de que esta ruta a firebase.js sea correcta
 import '../assets/css/estilos.css';
 
 // IMPORTAMOS LAS IMÁGENES
@@ -7,11 +10,46 @@ import inclusionImg from '../assets/inclusion.png';
 import accesibilidadImg from '../assets/accesibilidad.png';
 import autonomiaImg from '../assets/autonomia.png';
 import transcripcionImg from '../assets/transcripcion.png';
-// 👇 Nuevas imágenes importadas
 import personalizacionImg from '../assets/personalizacion.png'; 
 import disenoInclusivoImg from '../assets/diseño.png';
-import { Link } from 'react-router-dom';
+
 const Home = () => {
+  const navigate = useNavigate();
+  
+  // 👇 PASO B.1: Creamos el estado para guardar el nombre del usuario
+  const [nombreUsuario, setNombreUsuario] = useState(''); 
+
+  // 1. EL GUARDIA DE SEGURIDAD: Vigila si el usuario está logueado
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Si no hay usuario activo, lo manda al login. 
+        // El "replace: true" borra el historial para que la flecha de retroceso no funcione.
+        navigate('/login', { replace: true });
+      } else {
+        // 👇 PASO B.2: Si hay usuario, extraemos su nombre de Firebase
+        // Solo tomamos el primer nombre para que se vea mejor (Ej: "Juan Pérez" -> "Juan")
+        const nombreCompleto = user.displayName;
+        const primerNombre = nombreCompleto ? nombreCompleto.split(' ')[0] : '';
+        setNombreUsuario(primerNombre);
+      }
+    });
+
+    // Limpiamos el vigilante si el componente se desmonta
+    return () => unsubscribe();
+  }, [navigate]);
+
+  // 2. FUNCIÓN PARA CERRAR SESIÓN
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      // Tras cerrar sesión, lo enviamos al login y borramos el historial
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error.message);
+    }
+  };
+
   return (
     <div className="home-container">
       
@@ -20,10 +58,22 @@ const Home = () => {
         <div className="nav-logo">
           <h2><span className="logo-icon">❉</span> SINCA</h2>
         </div>
-        <ul className="nav-links">
+        
+        {/* Usamos flex y items-center para alinear los enlaces con el botón nuevo */}
+        <ul className="nav-links flex items-center gap-6">
           <li><a href="#que-busca">¿Qué busca?</a></li>
           <li><a href="#funcionalidad">Funcionalidad</a></li>
           <li><a href="#contactos">Contactos</a></li>
+          
+          {/* BOTÓN DE CERRAR SESIÓN EN LA NAVEGACIÓN */}
+          <li>
+            <button 
+              onClick={handleLogout}
+              className="bg-red-500 text-white px-5 py-2 rounded-full font-bold hover:bg-red-600 transition-colors text-sm shadow-md"
+            >
+              Cerrar Sesión
+            </button>
+          </li>
         </ul>
       </nav>
 
@@ -31,14 +81,15 @@ const Home = () => {
       <header className="home-hero">
         <div className="hero-texto">
           <h1 className="titulo-principal">
-            <span className="texto-verde">¡Bienvenid@</span><br/>
-            <span className="texto-verde">a SINCA!</span>
+            {/* 👇 PASO B.3: Mostramos el nombre dinámico aquí. 
+                 Si no hay nombre, mostrará solo "¡Bienvenid@!" */}
+            <span className="texto-verde">
+              ¡Bienvenid@{nombreUsuario ? ` ${nombreUsuario}` : ''}!
+            </span><br/>
+            <span className="texto-verde">a SINCA</span>
           </h1>
           <p className="subtitulo-hero">"Pensado para todos, creado para ayudarte"</p>
-          <div className="hero-botones">
-            <button className="btn-oscuro">Iniciar Sesión</button>
-            <button className="btn-oscuro">Regístrate</button>
-          </div>
+          
         </div>
         <div className="hero-imagen">
           <img src={heroImg} alt="Ilustración de niños aprendiendo" className="img-hero" />
@@ -73,25 +124,17 @@ const Home = () => {
         <h2 className="titulo-seccion">Funcionalidad</h2>
         <p className="texto-descripcion">Estas son algunas de las funciones que podrá hacer el usuario</p>
         
-        {/* BLOQUE 1: Transcripción (Imagen Izquierda, Texto Derecha) */}
-        {/* BLOQUE 1: Transcripción (Imagen Izquierda, Texto Derecha) */}
+        {/* BLOQUE 1: Transcripción */}
         <div className="contenedor-funcionalidad" style={{ marginBottom: '4rem' }}>
           <div className="funcionalidad-imagen">
-            
-            {/* La etiqueta de apertura del Link */}
             <Link to="/asistente">
-              
-              {/* La imagen está ADENTRO */}
               <img 
                 src={transcripcionImg} 
                 alt="Transcripción de audio" 
                 className="img-funcionalidad" 
                 style={{ cursor: 'pointer' }}
               />
-              
-            {/* La etiqueta de cierre del Link */}
             </Link>
-            
           </div>
           
           <div className="funcionalidad-texto">
@@ -107,11 +150,9 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Separador visual opcional como en Figma */}
         <hr style={{ borderTop: '2px solid #165c36', marginBottom: '4rem' }} />
 
-        {/* BLOQUE 2: Personalización "Aa" (Texto Izquierda, Imagen Derecha) */}
-        {/* BLOQUE 2: Personalización "Aa" (Texto Izquierda, Imagen Derecha) */}
+        {/* BLOQUE 2: Personalización */}
         <div className="contenedor-funcionalidad" style={{ marginBottom: '4rem' }}>
           <div className="funcionalidad-texto">
             <div className="item-funcion">
@@ -121,8 +162,6 @@ const Home = () => {
           </div>
 
           <div className="funcionalidad-imagen">
-            
-            {/* 👇 Envolvemos la imagen con el Link hacia /accesibilidad */}
             <Link to="/accesibilidad">
               <img 
                 src={personalizacionImg} 
@@ -131,18 +170,14 @@ const Home = () => {
                 style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
               />
             </Link>
-            
           </div>
         </div>
 
         <hr style={{ borderTop: '2px solid #165c36', marginBottom: '4rem' }} />
 
-        {/* BLOQUE 3: Diseño Inclusivo (Imagen Izquierda, Texto Derecha) */}
-        {/* BLOQUE 3: Diseño Inclusivo (Imagen Izquierda, Texto Derecha) */}
+        {/* BLOQUE 3: Diseño Inclusivo */}
         <div className="contenedor-funcionalidad">
           <div className="funcionalidad-imagen">
-            
-            {/* 👇 Envolvemos la imagen con el Link hacia /lectura */}
             <Link to="/lectura">
               <img 
                 src={disenoInclusivoImg} 
@@ -151,7 +186,6 @@ const Home = () => {
                 style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
               />
             </Link>
-            
           </div>
           
           <div className="funcionalidad-texto">

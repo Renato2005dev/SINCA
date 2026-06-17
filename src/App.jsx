@@ -1,14 +1,22 @@
-
-// Importamos la pantalla que queremos ver directamente
-import VoiceAssistant from './pages/VoiceAssistant';
-// import Login from './pages/Login'; // Puedes descomentar esta si luego quieres ver el login
+// En tu archivo App.jsx
+import React from 'react';
+import AppRouter from './router/AppRouter'; // O donde tengas tu Router
+import LectorAccesible from './components/LectorAccesible';
 
 function App() {
   return (
-    <>
-      {/* Mostramos el componente a la fuerza, sin usar rutas */}
-      <VoiceAssistant /> 
-    </>
+    // ESTE ES EL ID CLAVE que ahora envuelve todo tu proyecto
+    <div id="contenido-principal" className="min-h-screen relative">
+      
+      {/* Tu enrutador que carga Home, Login, etc. */}
+      <AppRouter />
+
+      {/* Tu Lector Global Flotante */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <LectorAccesible />
+      </div>
+      
+    </div>
   );
 }
 
