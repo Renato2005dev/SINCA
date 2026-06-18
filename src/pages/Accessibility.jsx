@@ -1,6 +1,7 @@
 import { RiArrowLeftLine, RiBrainLine, RiClosedCaptioningFill, RiContrastFill, RiMoonFill, RiQrScanLine, RiRefreshLine, RiSunLine } from "react-icons/ri";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccessibility } from "../hooks/useAccessibility";
 
 const Toggle = ({ checked, onChange }) => (
   <button
@@ -14,95 +15,85 @@ const Toggle = ({ checked, onChange }) => (
 );
 
 const Accessibility = () => {
-  // 👇 1. INICIAMOS LEYENDO LA MEMORIA DEL NAVEGADOR
-  const [sliderValue, setSliderValue] = useState(() => Number(localStorage.getItem("sinca-fontSize")) || 16);
-  const [apariencia, setApariencia] = useState(() => localStorage.getItem("sinca-theme") || "normal");
-  const [subtitulos, setSubtitulos] = useState(() => localStorage.getItem("sinca-subs") === "true" || true);
-  const [modoSimple, setModoSimple] = useState(
-    () => localStorage.getItem("sinca-modo") === "true",
-  );
-  const [readingMask, setReadingMask] = useState(
-    () => localStorage.getItem("sinca-reading-mask") === "true",
-  );
-  
   const navigate = useNavigate();
+  
+  // ✅ Usamos el contexto para todas las configuraciones
+  const { 
+    tema, 
+    cambiarTema, 
+    fontSize, 
+    cambiarFontSize,
+    subtitulos,
+    cambiarSubtitulos,
+    modoSimple,
+    cambiarModoSimple,
+    readingMask,
+    cambiarReadingMask,
+    resetearAccesibilidad
+  } = useAccessibility();
+
+  const [sliderValue, setSliderValue] = useState(fontSize);
 
   const MIN = 12, MAX = 32;
   const percent = ((sliderValue - MIN) / (MAX - MIN)) * 100;
 
-  // 👇 2. AL DAR CLIC EN "APLICAR", GUARDAMOS EL TAMAÑO
   const handleAplicar = () => {
-    document.documentElement.style.fontSize = `${sliderValue}px`;
-    localStorage.setItem("sinca-fontSize", sliderValue);
+    cambiarFontSize(sliderValue);
     alert("Tamaño de texto aplicado y guardado.");
   };
 
-  // 👇 3. AL ELEGIR UN TEMA, LO GUARDAMOS
-const handleTemaChange = (nuevoTema) => {
-    setApariencia(nuevoTema);
-    localStorage.setItem("sinca-theme", nuevoTema);
-    document.body.setAttribute('data-theme', nuevoTema); // Cambia el color de toda la web
+  const handleTemaChange = (nuevoTema) => {
+    cambiarTema(nuevoTema);
   };
 
-  // Funciones para los Toggles
   const handleSubtitulosChange = (valor) => {
-    setSubtitulos(valor);
-    localStorage.setItem("sinca-subs", valor);
+    cambiarSubtitulos(valor);
   };
 
   const handleModoChange = (valor) => {
-    setModoSimple(valor);
-    localStorage.setItem("sinca-modo", valor);
-  };
-  
- const handleReset = () => {
-    setSliderValue(16);
-    setApariencia("normal");
-    setSubtitulos(true);
-    setModoSimple(false);
-    setReadingMask(false);
-    document.documentElement.style.fontSize = "16px";
-    document.body.removeAttribute('data-theme'); // Quita el modo oscuro/alto contraste
-    localStorage.clear();
-    window.dispatchEvent(new Event("reading-mask-change"));
+    cambiarModoSimple(valor);
   };
 
-  //nuevo
   const handleReadingMaskChange = (valor) => {
-    setReadingMask(valor);
-    localStorage.setItem("sinca-reading-mask", String(valor));
-    window.dispatchEvent(new Event("reading-mask-change"));
+    cambiarReadingMask(valor);
   };
 
-  // Clases dinámicas
+  const handleReset = () => {
+    setSliderValue(16);
+    resetearAccesibilidad();
+  };
+
+  // Clases dinámicas según el tema
   const temaClases = {
     normal: "bg-gray-100 text-gray-900",
     oscuro: "bg-gray-900 text-white",
     alto: "bg-black text-yellow-400",
   };
+  
   const cardClases = {
     normal: "bg-white border-gray-200",
     oscuro: "bg-gray-800 border-gray-700",
-    alto: "bg-gray-950 border-yellow-500",
+    alto: "bg-black border-yellow-500",
   };
+  
   const muted = {
     normal: "text-gray-500",
     oscuro: "text-gray-400",
     alto: "text-yellow-300",
   };
 
-  const tema = temaClases[apariencia];
-  const card = cardClases[apariencia];
-  const textMuted = muted[apariencia];
+  const temaClase = temaClases[tema];
+  const card = cardClases[tema];
+  const textMuted = muted[tema];
 
   return (
-    <div className={`min-h-screen ${tema} flex flex-col font-sans`}>
+    <div className={`min-h-screen ${temaClase} flex flex-col font-sans`}>
       
-      <header className={`flex justify-between items-center px-8 py-3 border-b-2 ${apariencia === "alto" ? "border-yellow-500 bg-black" : apariencia === "oscuro" ? "border-gray-700 bg-gray-900" : "border-[#165c36] bg-white"} w-full transition-colors`}>
-        <div className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold text-xl flex items-center gap-2`}>
+      <header className={`flex justify-between items-center px-8 py-3 border-b-2 ${tema === "alto" ? "border-yellow-500 bg-black" : tema === "oscuro" ? "border-gray-700 bg-gray-900" : "border-[#165c36] bg-white"} w-full transition-colors`}>
+        <div className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold text-xl flex items-center gap-2`}>
           <span className="text-3xl">❉</span> SINCA
         </div>
-        <button onClick={() => navigate('/dashboard')} className={`${apariencia === "alto" ? "text-yellow-400" : apariencia === "oscuro" ? "text-white" : "text-[#165c36]"} flex items-center gap-2 text-base font-bold hover:underline transition-all`}>
+        <button onClick={() => navigate('/dashboard')} className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} flex items-center gap-2 text-base font-bold hover:underline transition-all`}>
           <RiArrowLeftLine className="w-5 h-5" /> Volver al Inicio
         </button>
       </header>
@@ -144,7 +135,7 @@ const handleTemaChange = (nuevoTema) => {
             </div>
             
             <p className="text-sm font-medium my-4">Vista previa de tamaño de texto</p>
-            <div className={`border rounded-lg p-4 min-h-22.5 ${apariencia === "normal" ? "bg-gray-50" : apariencia === "oscuro" ? "bg-gray-900" : "bg-gray-950"}`}>
+            <div className={`border rounded-lg p-4 min-h-22.5 ${tema === "normal" ? "bg-gray-50" : tema === "oscuro" ? "bg-gray-900" : "bg-black"}`}>
               <p style={{ fontSize: `${sliderValue}px` }}>
                 Este es un ejemplo de como se verá el texto en la aplicación con el tamaño seleccionado
               </p>
@@ -157,19 +148,18 @@ const handleTemaChange = (nuevoTema) => {
             </div>
           </div>
 
-          {/* 👇 USAMOS handleTemaChange AQUÍ 👇 */}
           <div className={`border rounded-xl p-5 ${card}`}>
             <h2 className="text-sm font-semibold mb-1 text-[#27500A]">Apariencia</h2>
             <p className={`text-sm mb-4 ${textMuted}`}>Elige el modo visual para mejor visibilidad</p>
             <div className="flex items-center justify-center gap-3">
-              <button onClick={() => handleTemaChange("normal")} className={`flex flex-col items-center gap-1.5 px-6 py-3 rounded-xl text-sm font-semibold border-2 ${apariencia === "normal" ? "bg-white border-gray-900 text-gray-900" : "bg-white border-gray-200 text-gray-500 hover:border-gray-400"}`}>
+              <button onClick={() => handleTemaChange("normal")} className={`flex flex-col items-center gap-1.5 px-6 py-3 rounded-xl text-sm font-semibold border-2 ${tema === "normal" ? "bg-white border-gray-900 text-gray-900" : "bg-white border-gray-200 text-gray-500 hover:border-gray-400"}`}>
                 <RiSunLine className="w-5 h-5" /> Normal
               </button>
-              <button onClick={() => handleTemaChange("oscuro")} className={`flex flex-col items-center gap-1.5 px-6 py-3 rounded-xl text-sm font-semibold border-2 ${apariencia === "oscuro" ? "bg-gray-900 border-gray-900 text-white" : "bg-white border-gray-200 text-gray-500 hover:border-gray-400"}`}>
-                <RiMoonFill className={`w-5 h-5 ${apariencia === "oscuro" ? "text-yellow-400" : ""}`} /> Oscuro
+              <button onClick={() => handleTemaChange("oscuro")} className={`flex flex-col items-center gap-1.5 px-6 py-3 rounded-xl text-sm font-semibold border-2 ${tema === "oscuro" ? "bg-gray-900 border-gray-900 text-white" : "bg-white border-gray-200 text-gray-500 hover:border-gray-400"}`}>
+                <RiMoonFill className={`w-5 h-5 ${tema === "oscuro" ? "text-yellow-400" : ""}`} /> Oscuro
               </button>
-              <button onClick={() => handleTemaChange("alto")} className={`flex flex-col items-center gap-1.5 px-5 py-3 rounded-xl text-sm font-semibold border-2 ${apariencia === "alto" ? "bg-black border-yellow-400 text-yellow-400" : "bg-white border-gray-200 text-gray-500 hover:border-gray-400"}`}>
-                <RiContrastFill className={`w-5 h-5 ${apariencia === "alto" ? "text-yellow-400" : ""}`} /> Alto contraste
+              <button onClick={() => handleTemaChange("alto")} className={`flex flex-col items-center gap-1.5 px-5 py-3 rounded-xl text-sm font-semibold border-2 ${tema === "alto" ? "bg-black border-yellow-400 text-yellow-400" : "bg-white border-gray-200 text-gray-500 hover:border-gray-400"}`}>
+                <RiContrastFill className={`w-5 h-5 ${tema === "alto" ? "text-yellow-400" : ""}`} /> Alto contraste
               </button>
             </div>
           </div>
@@ -177,7 +167,7 @@ const handleTemaChange = (nuevoTema) => {
           <div className={`border rounded-xl p-5 ${card}`}>
             <h2 className="text-sm font-semibold mb-3 text-[#27500A]">Subtítulos Automático</h2>
             <div className="flex items-center gap-3">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${apariencia === "normal" ? "bg-green-100" : "bg-green-700"}`}>
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${tema === "normal" ? "bg-green-100" : "bg-green-700"}`}>
                 <RiClosedCaptioningFill className={`w-5 h-5 ${textMuted}`} />
               </div>
               <div className="flex-1">
@@ -190,7 +180,7 @@ const handleTemaChange = (nuevoTema) => {
           <div className={`border rounded-xl p-5 ${card}`}>
             <h2 className="text-sm font-semibold mb-3 text-[#27500A]">Modo cognitivo simplificado</h2>
             <div className="flex items-center gap-3">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${apariencia === "normal" ? "bg-green-100" : "bg-green-700"}`}>
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${tema === "normal" ? "bg-green-100" : "bg-green-700"}`}>
                 <RiBrainLine className={`w-5 h-5 ${textMuted}`} />
               </div>
               <div className="flex-1">
@@ -200,32 +190,21 @@ const handleTemaChange = (nuevoTema) => {
             </div>
           </div>
 
-          {/* Nuevo bloque para Reading Mask */}
           <div className={`border rounded-xl p-5 ${card}`}>
-            <h2 className="text-sm font-semibold mb-3 text-[#27500A]">
-              {" "}
-              Máscara de lectura
-            </h2>
+            <h2 className="text-sm font-semibold mb-3 text-[#27500A]">Máscara de lectura</h2>
             <div className="flex items-center gap-3">
-              <div
-                className={`w-9 h-9 rounded-lg flex items-center justify-center ${apariencia === "normal" ? "bg-green-100" : "bg-green-700"}`}
-              >
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${tema === "normal" ? "bg-green-100" : "bg-green-700"}`}>
                 <RiQrScanLine className={`w-5 h-5 ${textMuted}`} />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-semibold">
-                  Activar guía de lectura
-                </p>
+                <p className="text-sm font-semibold">Activar guía de lectura</p>
               </div>
-              <Toggle
-                checked={readingMask}
-                onChange={handleReadingMaskChange}
-              />
+              <Toggle checked={readingMask} onChange={handleReadingMaskChange} />
             </div>
           </div>
 
           <div className="flex justify-end pb-2">
-            <button onClick={handleReset} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-medium ${apariencia === "normal" ? "border-gray-300 text-gray-600" : "border-gray-600 text-gray-300"}`}>
+            <button onClick={handleReset} className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-medium ${tema === "normal" ? "border-gray-300 text-gray-600" : "border-gray-600 text-gray-300"}`}>
               <RiRefreshLine className="w-4 h-4" /> Restablecer todo
             </button>
           </div>

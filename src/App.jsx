@@ -1,5 +1,4 @@
 // En tu archivo App.jsx
-import React from 'react';
 import AppRouter from './router/AppRouter'; // O donde tengas tu Router
 import LectorAccesible from './components/LectorAccesible';
 

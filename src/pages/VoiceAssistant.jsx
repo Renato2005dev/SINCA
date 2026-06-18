@@ -8,11 +8,14 @@ import {
 import {
   preguntarIA,
 } from "../services/chatgpt";
+import { useAccessibility } from "../hooks/useAccessibility"; // 👈 SOLO AGREGAR ESTO
 
 const VoiceAssistant = () => {
 
 const navigate =
 useNavigate();
+
+const { tema } = useAccessibility(); // 👈 SOLO AGREGAR ESTO
 
 const [texto,setTexto]=
 useState("");
@@ -32,6 +35,37 @@ useState(100);
 const [reconocimiento,
 setReconocimiento]=
 useState(null);
+
+// 👇 AGREGAR ESTAS CLASES (no eliminar nada)
+const temaClases = {
+  normal: "bg-[#f5f7f8] text-gray-900",
+  oscuro: "bg-gray-900 text-white",
+  alto: "bg-black text-yellow-400",
+};
+
+const headerClases = {
+  normal: "bg-white border-b border-gray-200",
+  oscuro: "bg-gray-800 border-b border-gray-700",
+  alto: "bg-black border-b border-yellow-500",
+};
+
+const textareaClases = {
+  normal: "bg-white text-black border-green-700",
+  oscuro: "bg-gray-800 text-white border-green-600",
+  alto: "bg-black text-yellow-400 border-yellow-500",
+};
+
+const respuestaClases = {
+  normal: "bg-white text-black border-green-700",
+  oscuro: "bg-gray-800 text-white border-green-600",
+  alto: "bg-black text-yellow-400 border-yellow-500",
+};
+
+const tituloClases = {
+  normal: "text-[#165c36]",
+  oscuro: "text-white",
+  alto: "text-yellow-400",
+};
 
 const aumentar=()=>{
 
@@ -231,10 +265,10 @@ return(
 
 <div
 
-className="
+className={`
 min-h-screen
-bg-[#f5f7f8]
-"
+${temaClases[tema] || temaClases.normal}
+`}
 
 style={{
 zoom:
@@ -245,25 +279,24 @@ zoom:
 
 <header
 
-className="
+className={`
 flex
 justify-between
 items-start
 px-8
 py-4
-bg-white
-border-b
-"
+${headerClases[tema]}
+`}
 
 >
 
 <div
 
-className="
-text-[#165c36]
+className={`
 font-bold
 text-2xl
-"
+${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"}
+`}
 
 >
 
@@ -292,13 +325,13 @@ navigate(
 
 }
 
-className="
+className={`
 flex
 gap-2
 items-center
-text-[#165c36]
 font-bold
-"
+${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"}
+`}
 
 >
 
@@ -373,12 +406,12 @@ p-10
 
 <h1
 
-className="
+className={`
 text-4xl
 font-bold
-text-[#165c36]
 mb-2
-"
+${tituloClases[tema]}
+`}
 
 >
 
@@ -426,19 +459,17 @@ placeholder="
 Habla o escribe aquí tu pregunta...
 "
 
-className="
+className={`
 w-full
 h-[260px]
-bg-white
-text-black
 border-2
-border-green-700
 rounded-xl
 p-8
 text-3xl
 shadow
 resize-none
-"
+${textareaClases[tema]}
+`}
 
 />
 
@@ -535,11 +566,12 @@ mt-10
 >
 
 <h2
-className="
+className={`
 text-3xl
 font-bold
 mb-4
-"
+${tituloClases[tema]}
+`}
 >
 
 Respuesta
@@ -548,16 +580,14 @@ Respuesta
 
 <div
 
-className="
-bg-white
+className={`
 border-2
-border-green-700
 rounded-xl
 p-8
 text-2xl
 min-h-[250px]
-text-black
-"
+${respuestaClases[tema]}
+`}
 
 >
 

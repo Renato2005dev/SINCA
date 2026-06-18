@@ -6,14 +6,47 @@ import {
   RiShareBoxFill,
   RiArrowLeftLine,
 } from "react-icons/ri";
+import { useAccessibility } from "../hooks/useAccessibility";
 
 const LecturaAccesible = () => {
   const navigate = useNavigate();
+  const { tema } = useAccessibility();
 
   const [texto, setTexto] = useState("");
   const [fontSize, setFontSize] = useState(28);
   const [contraste, setContraste] = useState(false);
   const [leyendo, setLeyendo] = useState(false);
+
+  // 👇 CLASES PARA LOS TEMAS
+  const temaClases = {
+    normal: "bg-white text-gray-800",
+    oscuro: "bg-gray-900 text-white",
+    alto: "bg-black text-yellow-400",
+  };
+
+  const headerClases = {
+    normal: "border-green-700",
+    oscuro: "border-gray-700",
+    alto: "border-yellow-500",
+  };
+
+  const textareaClases = {
+    normal: "bg-white text-gray-800 border-gray-300",
+    oscuro: "bg-gray-800 text-white border-gray-600",
+    alto: "bg-black text-yellow-400 border-yellow-500",
+  };
+
+  const tituloClases = {
+    normal: "text-gray-800",
+    oscuro: "text-white",
+    alto: "text-yellow-400",
+  };
+
+  const headerTextClases = {
+    normal: "text-green-700",
+    oscuro: "text-white",
+    alto: "text-yellow-400",
+  };
 
   // LEER TEXTO ESCRITO
   const escucharTexto = () => {
@@ -74,23 +107,17 @@ const LecturaAccesible = () => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col transition-all
-      ${
-        contraste
-          ? "bg-black text-white"
-          : "bg-white text-gray-800"
-      }`}
+      className={`min-h-screen flex flex-col transition-all ${temaClases[tema] || temaClases.normal}`}
     >
       {/* HEADER */}
-      <header className="flex justify-between items-center px-8 py-4 border-b border-green-700">
-
-        <div className="text-green-700 text-2xl font-bold">
+      <header className={`flex justify-between items-center px-8 py-4 border-b ${headerClases[tema]}`}>
+        <div className={`${headerTextClases[tema]} text-2xl font-bold`}>
           ❉ SINCA
         </div>
 
         <button
           onClick={() => navigate("/dashboard")}
-          className="flex gap-2 items-center text-green-700"
+          className={`flex gap-2 items-center ${headerTextClases[tema]}`}
         >
           <RiArrowLeftLine />
           Volver al Inicio
@@ -101,7 +128,7 @@ const LecturaAccesible = () => {
       {/* CONTENIDO */}
       <div className="flex flex-col items-center p-10 gap-8">
 
-        <h1 className="text-3xl font-bold">
+        <h1 className={`text-3xl font-bold ${tituloClases[tema]}`}>
           Lectura Accesible
         </h1>
 
@@ -125,12 +152,7 @@ const LecturaAccesible = () => {
             resize-none
             outline-none
             shadow-lg
-
-            ${
-              contraste
-                ? "bg-black text-white"
-                : "bg-white"
-            }
+            ${textareaClases[tema] || "bg-white text-gray-800"}
           `}
         />
 
