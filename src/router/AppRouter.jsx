@@ -7,7 +7,6 @@ import Login from '../pages/Login';
 import Register from '../pages/Register';
 import VoiceAssistant from '../pages/VoiceAssistant';
 import Accessibility from '../pages/Accessibility'; 
-import LecturaAccesible from '../pages/LecturaAccesible'; 
 
 // Importaciones de Renato y Daylee (Accesibilidad)
 import ReadingMask from '../components/ReadingMask';
@@ -67,7 +66,6 @@ function AppRouter() {
           <Route path="/home" element={<Home />} />
           <Route path="/asistente" element={<VoiceAssistant />} />
           <Route path="/accesibilidad" element={<Accessibility />} />
-          <Route path="/lectura" element={<LecturaAccesible />} />
           
           {/* 👇 Las nuevas rutas agregadas por Tifany */}
           <Route path="/multimedia" element={<Multimedia />} />

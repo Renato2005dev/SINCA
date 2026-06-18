@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { signOut, onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase'; 
+
 import {
   RiArrowDownSLine,
   RiLogoutBoxRLine,
   RiSettings3Line,
   RiMicLine,
-  RiBookOpenLine,
   RiMovieLine,
   RiShieldCheckLine,
-} from "react-icons/ri";
+} from "react-icons/ri"; // 👇 Eliminé RiBookOpenLine porque ya no se usa
 
 import portadaImg from "../assets/portada.jpg";
 import accesibilidadImg from "../assets/accesibilidad.png";
@@ -18,12 +20,42 @@ import transcripcionImg from "../assets/transcripcion.png";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
+  
+  // Creamos el estado para el nombre del usuario
+  const [nombreUsuario, setNombreUsuario] = useState('');
+
+  // EL GUARDIA DE SEGURIDAD: Vigila si el usuario está logueado
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        navigate('/login', { replace: true });
+      } else {
+        // Extraemos el nombre de Firebase si el usuario existe
+        const nombreCompleto = user.displayName;
+        const primerNombre = nombreCompleto ? nombreCompleto.split(' ')[0] : '';
+        setNombreUsuario(primerNombre);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
+  // FUNCIÓN PARA CERRAR SESIÓN REAL
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error.message);
+    }
+  };
 
   const irModulo = (ruta) => {
     setOpenMenu(false);
     navigate(ruta);
   };
 
+  // 👇 ELIMINAMOS "LECTURA ACCESIBLE" DE ESTA LISTA
   const modulos = [
     {
       titulo: "Configuración de Accesibilidad",
@@ -38,13 +70,6 @@ const Dashboard = () => {
         "Convierte voz a texto para facilitar la comunicación en tiempo real.",
       icono: <RiMicLine />,
       ruta: "/asistente",
-    },
-    {
-      titulo: "Lectura Accesible",
-      descripcion:
-        "Permite leer información con apoyo visual, auditivo y controles claros.",
-      icono: <RiBookOpenLine />,
-      ruta: "/lectura",
     },
     {
       titulo: "Módulo Multimedia",
@@ -110,7 +135,7 @@ const Dashboard = () => {
           </div>
 
           <button
-            onClick={() => navigate("/home")}
+            onClick={handleLogout}
             className="text-[#165c36] font-bold hover:underline flex items-center gap-1"
           >
             <RiLogoutBoxRLine />
@@ -134,7 +159,7 @@ const Dashboard = () => {
                 </p>
 
                 <h1 className="text-5xl font-extrabold text-[#165c36] mb-4 leading-tight">
-                  Bienvenido a SINCA
+                  ¡Bienvenid@{nombreUsuario ? ` ${nombreUsuario}` : ''} a SINCA!
                 </h1>
 
                 <p className="text-[#343A40] text-lg mb-6 max-w-xl">
@@ -200,7 +225,8 @@ const Dashboard = () => {
               Elige una herramienta para comenzar a usar SINCA.
             </p>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* 👇 Cambié lg:grid-cols-4 a lg:grid-cols-3 porque ahora son solo 3 módulos */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {modulos.map((modulo) => (
                 <button
                   key={modulo.ruta}
