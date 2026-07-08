@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
 import { RiArrowLeftLine, RiEyeOffLine, RiEyeLine } from 'react-icons/ri';
 
@@ -15,7 +15,16 @@ function Register() {
     e.preventDefault();
     try {
       // 1. Esto es lo que crea el usuario en Firebase (y ya lo hace bien)
-      await createUserWithEmailAndPassword(auth, correo, contraseña);
+      const credencial = await createUserWithEmailAndPassword(
+        auth,
+        correo,
+        contraseña
+      );
+      
+      // Guardar el nombre del usuario
+      await updateProfile(credencial.user, {
+        displayName: nombre,
+      });
       
       // 2. Si llega aquí, es que SÍ se creó. 
       // ¡No llames al alert de error! 
@@ -26,7 +35,23 @@ function Register() {
     } catch (error) {
       // Solo entra aquí si realmente hubo un error (ej. contraseña muy corta)
       console.error(error);
-      alert("Hubo un error al registrarte.");
+      
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          alert("Este correo ya está registrado.");
+          break;
+          
+        case "auth/weak-password":
+          alert("La contraseña debe tener al menos 6 caracteres.");
+          break;
+          
+        case "auth/invalid-email":
+          alert("El correo electrónico no es válido.");
+          break;
+        
+        default:
+          alert("Hubo un error al registrarte.");
+      }
     }
   };
 

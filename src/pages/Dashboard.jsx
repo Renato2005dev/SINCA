@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { auth } from "../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { getEmojiPorFoto } from "../avatares";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   RiArrowDownSLine,
@@ -8,6 +11,7 @@ import {
   RiBookOpenLine,
   RiMovieLine,
   RiShieldCheckLine,
+  RiUser3Line,
 } from "react-icons/ri";
 
 import portadaImg from "../assets/portada.jpg";
@@ -18,6 +22,32 @@ import transcripcionImg from "../assets/transcripcion.png";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
+  const [usuario, setUsuario] = useState({ nombre: "", foto: "" });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsuario({
+          nombre: user.displayName || "Usuario SINCA",
+          foto: user.photoURL || "",
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const cerrarSesion = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const emojiActual = getEmojiPorFoto(usuario.foto);
+  const primerNombre = usuario.nombre.split(" ")[0];
 
   const irModulo = (ruta) => {
     setOpenMenu(false);
@@ -81,14 +111,19 @@ const Dashboard = () => {
           SINCA
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
+
+          {/* MENÚ DE MÓDULOS */}
           <div className="relative">
             <button
-              onClick={() => setOpenMenu(!openMenu)}
-              className="text-[#165c36] font-bold hover:underline flex items-center gap-1"
+              onClick={() => {
+                setOpenMenu(!openMenu);
+                setOpenUserMenu(false);
+              }}
+              className="text-[#165c36] font-bold hover:bg-green-50 px-3 py-2 rounded-lg flex items-center gap-1 transition"
             >
               Módulos
-              <RiArrowDownSLine className="text-xl" />
+              <RiArrowDownSLine className={`text-xl transition-transform ${openMenu ? "rotate-180" : ""}`} />
             </button>
 
             {openMenu && (
@@ -109,13 +144,60 @@ const Dashboard = () => {
             )}
           </div>
 
-          <button
-            onClick={() => navigate("/login")}
-            className="text-[#165c36] font-bold hover:underline flex items-center gap-1"
-          >
-            <RiLogoutBoxRLine />
-            Cerrar Sesión
-          </button>
+          {/* DIVISOR */}
+          <div className="w-px h-8 bg-gray-200" />
+
+          {/* MENÚ DE USUARIO */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                setOpenUserMenu(!openUserMenu);
+                setOpenMenu(false);
+              }}
+              className="flex items-center gap-3 pl-2 pr-3 py-1.5 rounded-full hover:bg-green-50 transition"
+            >
+              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#165c36] flex items-center justify-center bg-green-50 shrink-0">
+                {emojiActual ? (
+                  <span className="text-xl">{emojiActual}</span>
+                ) : usuario.foto ? (
+                  <img src={usuario.foto} alt="Foto de perfil" className="w-full h-full object-cover" />
+                ) : (
+                  <RiUser3Line className="text-lg text-[#165c36]" />
+                )}
+              </div>
+
+              <div className="leading-tight hidden sm:block text-left">
+                <p className="text-[11px] text-gray-500">¡Bienvenido/a!</p>
+                <p className="font-bold text-[#165c36] text-sm">{primerNombre}</p>
+              </div>
+
+              <RiArrowDownSLine className={`text-lg text-[#165c36] transition-transform ${openUserMenu ? "rotate-180" : ""}`} />
+            </button>
+
+            {openUserMenu && (
+              <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+                <button
+                  onClick={() => {
+                    setOpenUserMenu(false);
+                    navigate("/perfil");
+                  }}
+                  className="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-3 text-[#343A40]"
+                >
+                  <RiUser3Line className="text-[#165c36] text-lg" />
+                  Mi Perfil
+                </button>
+
+                <button
+                  onClick={cerrarSesion}
+                  className="w-full text-left px-4 py-3 hover:bg-red-50 flex items-center gap-3 text-red-700 border-t border-gray-100"
+                >
+                  <RiLogoutBoxRLine className="text-lg" />
+                  Cerrar Sesión
+                </button>
+              </div>
+            )}
+          </div>
+
         </div>
       </header>
 

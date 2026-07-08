@@ -10,6 +10,7 @@ import Accessibility from '../pages/Accessibility';
 import LecturaAccesible from '../pages/LecturaAccesible'; 
 import Multimedia from "../pages/Multimedia";
 import Dashboard from '../pages/Dashboard';
+import Perfil from '../pages/Perfil';
 
 function AppRouter() {
   
@@ -41,6 +42,7 @@ function AppRouter() {
         <Route path="/lectura" element={<LecturaAccesible />} />
         <Route path="/multimedia" element={<Multimedia />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/perfil" element={<Perfil />} />
         
         {/* Ruta de seguridad: si escriben mal la URL, los manda al Login */}
         <Route path="*" element={<Navigate to="/login" />} />
