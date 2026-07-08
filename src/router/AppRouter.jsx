@@ -15,7 +15,8 @@ import LectorAccesible from '../components/LectorAccesible';
 // Importaciones de Tifany (Nuevas pantallas)
 import Multimedia from "../pages/Multimedia";
 import Dashboard from '../pages/Dashboard';
-
+// Cambia lo que habías puesto por esto:
+import Traductor from '../pages/Traductor';
 function AppRouter() {
   
   // Memoria del tamaño de letra y del tema visual
@@ -66,7 +67,8 @@ function AppRouter() {
           <Route path="/home" element={<Home />} />
           <Route path="/asistente" element={<VoiceAssistant />} />
           <Route path="/accesibilidad" element={<Accessibility />} />
-          
+          // Cambia la ruta por esta:
+          <Route path="/traductor" element={<Traductor />} />
           {/* 👇 Las nuevas rutas agregadas por Tifany */}
           <Route path="/multimedia" element={<Multimedia />} />
           <Route path="/dashboard" element={<Dashboard />} />

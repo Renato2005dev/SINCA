@@ -11,6 +11,7 @@ import {
   RiMicLine,
   RiMovieLine,
   RiShieldCheckLine,
+  RiHandCoinLine
 } from "react-icons/ri";
 
 import portadaImg from "../assets/portada.jpg";
@@ -76,6 +77,13 @@ const Dashboard = () => {
       descripcion: "Trabaja con subtítulos, transcripciones y contenido audiovisual accesible.",
       icono: <RiMovieLine />,
       ruta: "/multimedia",
+    },
+    {
+      titulo: "Traductor 3D",
+      descripcion:
+        "Escribe un texto y un avatar 3D lo traducirá a lenguaje de señas en tiempo real.",
+      icono: <RiHandCoinLine />, 
+      ruta: "/traductor", // 👈 Asegúrate de que diga solo /traductor
     },
   ];
 
