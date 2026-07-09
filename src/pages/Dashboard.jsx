@@ -16,7 +16,7 @@ import {
   RiHandCoinLine,
 } from "react-icons/ri";
 
-import portadaImg from "../assets/portada.jpg";
+import portada2Img from "../assets/portada2.jpg";
 import accesibilidadImg from "../assets/accesibilidad.png";
 import autonomiaImg from "../assets/autonomia.png";
 import transcripcionImg from "../assets/transcripcion.png";
@@ -251,7 +251,7 @@ const Dashboard = () => {
               <div className="flex justify-center">
                 <div className={`${tema === "alto" ? "bg-black border-yellow-500" : tema === "oscuro" ? "bg-gray-700 border-gray-600" : "bg-white border-green-100"} rounded-full p-6 shadow-md border`}>
                   <img
-                    src={portadaImg}
+                    src={portada2Img}
                     alt="Ilustración de accesibilidad e inclusión digital"
                     className="w-full max-w-md object-contain"
                   />
