@@ -13,6 +13,7 @@ import {
   RiFileTextLine,
   RiCloseCircleLine,
 } from "react-icons/ri";
+import { useAccessibility } from "../hooks/useAccessibility"; // 👈 SOLO AGREGAR ESTO
 
 const useTranscriptor = (nombreArchivo) => {
   const recognitionRef = useRef(null);
@@ -210,6 +211,7 @@ const BotonesControl = ({ transcriptor }) => {
 
 const Multimedia = () => {
   const navigate = useNavigate();
+  const { tema } = useAccessibility(); // 👈 SOLO AGREGAR ESTO
 
   const mediaRef = useRef(null);
 
@@ -219,6 +221,31 @@ const Multimedia = () => {
 
   const transcriptorArchivo = useTranscriptor("archivo_multimedia");
   const transcriptorVoz = useTranscriptor("microfono_directo");
+
+  // 👇 AGREGAR ESTAS CLASES (no eliminar nada)
+  const temaClases = {
+    normal: "bg-gray-100 text-[#343A40]",
+    oscuro: "bg-gray-900 text-white",
+    alto: "bg-black text-yellow-400",
+  };
+
+  const headerClases = {
+    normal: "bg-white border-b-2 border-[#165c36]",
+    oscuro: "bg-gray-800 border-b-2 border-gray-700",
+    alto: "bg-black border-b-2 border-yellow-500",
+  };
+
+  const cardClases = {
+    normal: "bg-white border border-gray-200",
+    oscuro: "bg-gray-800 border border-gray-700",
+    alto: "bg-black border border-yellow-500",
+  };
+
+  const tituloClases = {
+    normal: "text-black",
+    oscuro: "text-white",
+    alto: "text-yellow-400",
+  };
 
   const cargarArchivo = (e) => {
     const file = e.target.files[0];
@@ -273,16 +300,16 @@ const Multimedia = () => {
     : "text-gray-500";
 
   return (
-    <div className="min-h-screen bg-gray-100 text-[#343A40] flex flex-col font-sans">
-      <header className="flex justify-between items-center px-8 py-3 border-b-2 border-[#165c36] bg-white w-full">
-        <div className="text-[#165c36] font-bold text-xl flex items-center gap-2">
+    <div className={`min-h-screen ${temaClases[tema] || temaClases.normal} flex flex-col font-sans`}>
+      <header className={`flex justify-between items-center px-8 py-3 ${headerClases[tema]} w-full`}>
+        <div className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold text-xl flex items-center gap-2`}>
           <span className="text-3xl">❉</span>
           SINCA
         </div>
 
         <button
           onClick={() => navigate("/dashboard")}
-          className="text-[#165c36] flex items-center gap-2 text-base font-bold hover:underline"
+          className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} flex items-center gap-2 text-base font-bold hover:underline`}
         >
           <RiArrowLeftLine className="w-5 h-5" />
           Volver al Inicio
@@ -300,33 +327,33 @@ const Multimedia = () => {
             </button>
 
             <div>
-              <h1 className="text-xl font-bold text-black">
+              <h1 className={`text-xl font-bold ${tituloClases[tema]}`}>
                 Módulo Multimedia Accesible
               </h1>
-              <p className="text-sm text-gray-500">
+              <p className={`text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-500"}`}>
                 Sube MP4/MP3 o usa el micrófono directo para transcribir voz en tiempo real.
               </p>
             </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 space-y-5">
+            <div className={`${cardClases[tema]} rounded-2xl shadow-sm p-5 space-y-5`}>
               <div>
-                <h2 className="text-lg font-bold text-black">
+                <h2 className={`text-lg font-bold ${tituloClases[tema]}`}>
                   Subtítulos para archivo MP4 o MP3
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className={`text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-500"}`}>
                   Al reproducir el archivo, el micrófono se activa automáticamente.
                 </p>
               </div>
 
               {!archivoURL && (
-                <label className="border-2 border-dashed border-[#165c36] rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-green-50 transition">
+                <label className={`border-2 border-dashed border-[#165c36] rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition ${tema === "alto" ? "hover:bg-gray-900" : tema === "oscuro" ? "hover:bg-gray-700" : "hover:bg-green-50"}`}>
                   <RiUploadCloud2Line className="text-5xl text-[#165c36] mb-2" />
-                  <span className="font-bold text-black">
+                  <span className={`font-bold ${tituloClases[tema]}`}>
                     Seleccionar archivo multimedia
                   </span>
-                  <span className="text-sm text-gray-500">
+                  <span className={`text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-500"}`}>
                     Formatos permitidos: MP4 o MP3
                   </span>
 
@@ -341,9 +368,9 @@ const Multimedia = () => {
 
               {archivoURL && (
                 <>
-                  <div className="flex justify-between items-center bg-gray-50 border rounded-xl px-4 py-3">
+                  <div className={`flex justify-between items-center ${tema === "alto" ? "bg-black border-yellow-500" : tema === "oscuro" ? "bg-gray-700" : "bg-gray-50"} border rounded-xl px-4 py-3`}>
                     <div>
-                      <p className="font-bold text-black">{archivo?.name}</p>
+                      <p className={`font-bold ${tituloClases[tema]}`}>{archivo?.name}</p>
                       <p className={`text-sm font-semibold ${estadoArchivoColor}`}>
                         Estado: {transcriptorArchivo.estado}
                       </p>
@@ -371,7 +398,7 @@ const Multimedia = () => {
                   )}
 
                   {tipoArchivo.includes("audio") && (
-                    <div className="bg-gray-900 rounded-xl p-6">
+                    <div className={`${tema === "alto" ? "bg-black" : "bg-gray-900"} rounded-xl p-6`}>
                       <audio
                         ref={mediaRef}
                         src={archivoURL}
@@ -384,13 +411,13 @@ const Multimedia = () => {
                     </div>
                   )}
 
-                  <div className="border rounded-xl p-4 bg-gray-50 min-h-40">
-                    <div className="flex items-center gap-2 mb-2 font-bold text-black">
+                  <div className={`border rounded-xl p-4 ${tema === "alto" ? "bg-black border-yellow-500" : tema === "oscuro" ? "bg-gray-700" : "bg-gray-50"} min-h-40`}>
+                    <div className="flex items-center gap-2 mb-2 font-bold">
                       <RiClosedCaptioningFill className="text-[#165c36]" />
-                      Subtítulos generados
+                      <span className={tituloClases[tema]}>Subtítulos generados</span>
                     </div>
 
-                    <p className="whitespace-pre-line text-sm">
+                    <p className={`whitespace-pre-line text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-300" : "text-gray-700"}`}>
                       {textoArchivo ||
                         "Los subtítulos aparecerán aquí cuando reproduzcas el archivo."}
                     </p>
@@ -401,12 +428,12 @@ const Multimedia = () => {
               )}
             </div>
 
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm p-5 space-y-5">
+            <div className={`${cardClases[tema]} rounded-2xl shadow-sm p-5 space-y-5`}>
               <div>
-                <h2 className="text-lg font-bold text-black">
+                <h2 className={`text-lg font-bold ${tituloClases[tema]}`}>
                   Micrófono directo
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className={`text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-500"}`}>
                   Presiona el ícono central y SINCA transcribirá lo que digas.
                 </p>
               </div>
@@ -430,13 +457,13 @@ const Multimedia = () => {
                 Estado: {transcriptorVoz.estado}
               </p>
 
-              <div className="border rounded-xl p-4 bg-gray-50 min-h-40">
-                <div className="flex items-center gap-2 mb-2 font-bold text-black">
+              <div className={`border rounded-xl p-4 ${tema === "alto" ? "bg-black border-yellow-500" : tema === "oscuro" ? "bg-gray-700" : "bg-gray-50"} min-h-40`}>
+                <div className="flex items-center gap-2 mb-2 font-bold">
                   <RiFileTextLine className="text-[#165c36]" />
-                  Transcripción del micrófono
+                  <span className={tituloClases[tema]}>Transcripción del micrófono</span>
                 </div>
 
-                <p className="whitespace-pre-line text-sm">
+                <p className={`whitespace-pre-line text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-300" : "text-gray-700"}`}>
                   {textoVoz || "Aquí aparecerá lo que hables por el micrófono."}
                 </p>
               </div>

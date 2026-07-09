@@ -1,17 +1,19 @@
-import { auth } from "../firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { getEmojiPorFoto } from "../avatares";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { signOut, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
+import { useAccessibility } from "../hooks/useAccessibility";
+import { getEmojiPorFoto } from "../avatares";
+
 import {
   RiArrowDownSLine,
   RiLogoutBoxRLine,
   RiSettings3Line,
   RiMicLine,
-  RiBookOpenLine,
   RiMovieLine,
   RiShieldCheckLine,
   RiUser3Line,
+  RiHandCoinLine,
 } from "react-icons/ri";
 
 import portadaImg from "../assets/portada.jpg";
@@ -21,13 +23,22 @@ import transcripcionImg from "../assets/transcripcion.png";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { tema } = useAccessibility();
   const [openMenu, setOpenMenu] = useState(false);
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const [usuario, setUsuario] = useState({ nombre: "", foto: "" });
 
+  const temaClases = {
+    normal: "bg-[#F4F5F7] text-[#343A40]",
+    oscuro: "bg-gray-900 text-white",
+    alto: "bg-black text-yellow-400",
+  };
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (!user) {
+        navigate("/login", { replace: true });
+      } else {
         setUsuario({
           nombre: user.displayName || "Usuario SINCA",
           foto: user.photoURL || "",
@@ -35,14 +46,14 @@ const Dashboard = () => {
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const cerrarSesion = async () => {
     try {
       await signOut(auth);
-      navigate("/login");
+      navigate("/login", { replace: true });
     } catch (error) {
-      console.error(error);
+      console.error("Error al cerrar sesión:", error.message);
     }
   };
 
@@ -57,31 +68,28 @@ const Dashboard = () => {
   const modulos = [
     {
       titulo: "Configuración de Accesibilidad",
-      descripcion:
-        "Personaliza tamaño de texto, apariencia, subtítulos y modo cognitivo simplificado.",
+      descripcion: "Personaliza tamaño de texto, apariencia, subtítulos y modo cognitivo simplificado.",
       icono: <RiSettings3Line />,
       ruta: "/accesibilidad",
     },
     {
       titulo: "Asistente de Voz",
-      descripcion:
-        "Convierte voz a texto para facilitar la comunicación en tiempo real.",
+      descripcion: "Convierte voz a texto para facilitar la comunicación en tiempo real.",
       icono: <RiMicLine />,
       ruta: "/asistente",
     },
     {
-      titulo: "Lectura Accesible",
-      descripcion:
-        "Permite leer información con apoyo visual, auditivo y controles claros.",
-      icono: <RiBookOpenLine />,
-      ruta: "/lectura",
-    },
-    {
       titulo: "Módulo Multimedia",
-      descripcion:
-        "Trabaja con subtítulos, transcripciones y contenido audiovisual accesible.",
+      descripcion: "Trabaja con subtítulos, transcripciones y contenido audiovisual accesible.",
       icono: <RiMovieLine />,
       ruta: "/multimedia",
+    },
+    {
+      titulo: "Traductor 3D",
+      descripcion:
+        "Escribe un texto y un avatar 3D lo traducirá a lenguaje de señas en tiempo real.",
+      icono: <RiHandCoinLine />,
+      ruta: "/traductor",
     },
   ];
 
@@ -104,9 +112,9 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] text-[#343A40] flex flex-col font-sans">
-      <header className="flex justify-between items-center px-8 py-3 border-b-2 border-[#165c36] bg-white w-full sticky top-0 z-50">
-        <div className="text-[#165c36] font-bold text-xl flex items-center gap-2">
+    <div className={`min-h-screen ${temaClases[tema] || temaClases.normal} flex flex-col font-sans`}>
+      <header className={`flex justify-between items-center px-8 py-3 border-b-2 ${tema === "alto" ? "border-yellow-500 bg-black" : tema === "oscuro" ? "border-gray-700 bg-gray-900" : "border-[#165c36] bg-white"} w-full sticky top-0 z-50`}>
+        <div className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold text-xl flex items-center gap-2`}>
           <span className="text-3xl">❉</span>
           SINCA
         </div>
@@ -120,21 +128,21 @@ const Dashboard = () => {
                 setOpenMenu(!openMenu);
                 setOpenUserMenu(false);
               }}
-              className="text-[#165c36] font-bold hover:bg-green-50 px-3 py-2 rounded-lg flex items-center gap-1 transition"
+              className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold hover:underline flex items-center gap-1`}
             >
               Módulos
               <RiArrowDownSLine className={`text-xl transition-transform ${openMenu ? "rotate-180" : ""}`} />
             </button>
 
             {openMenu && (
-              <div className="absolute right-0 mt-3 w-72 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+              <div className={`absolute right-0 mt-3 w-72 ${tema === "oscuro" ? "bg-gray-800 border-gray-700" : tema === "alto" ? "bg-black border-yellow-500" : "bg-white border-gray-200"} border rounded-xl shadow-lg z-50 overflow-hidden`}>
                 {modulos.map((modulo) => (
                   <button
                     key={modulo.ruta}
                     onClick={() => irModulo(modulo.ruta)}
-                    className="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-3"
+                    className={`w-full text-left px-4 py-3 flex items-center gap-3 ${tema === "alto" ? "text-yellow-400 hover:bg-gray-900" : tema === "oscuro" ? "text-white hover:bg-gray-700" : "hover:bg-gray-100"}`}
                   >
-                    <span className="text-[#165c36] text-xl">
+                    <span className={`${tema === "alto" ? "text-yellow-400" : "text-[#165c36]"} text-xl`}>
                       {modulo.icono}
                     </span>
                     {modulo.titulo}
@@ -145,7 +153,7 @@ const Dashboard = () => {
           </div>
 
           {/* DIVISOR */}
-          <div className="w-px h-8 bg-gray-200" />
+          <div className={`w-px h-8 ${tema === "oscuro" ? "bg-gray-700" : tema === "alto" ? "bg-yellow-600" : "bg-gray-200"}`} />
 
           {/* MENÚ DE USUARIO */}
           <div className="relative">
@@ -154,7 +162,7 @@ const Dashboard = () => {
                 setOpenUserMenu(!openUserMenu);
                 setOpenMenu(false);
               }}
-              className="flex items-center gap-3 pl-2 pr-3 py-1.5 rounded-full hover:bg-green-50 transition"
+              className={`flex items-center gap-3 pl-2 pr-3 py-1.5 rounded-full transition ${tema === "oscuro" ? "hover:bg-gray-800" : tema === "alto" ? "hover:bg-gray-900" : "hover:bg-green-50"}`}
             >
               <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#165c36] flex items-center justify-center bg-green-50 shrink-0">
                 {emojiActual ? (
@@ -167,29 +175,29 @@ const Dashboard = () => {
               </div>
 
               <div className="leading-tight hidden sm:block text-left">
-                <p className="text-[11px] text-gray-500">¡Bienvenido/a!</p>
-                <p className="font-bold text-[#165c36] text-sm">{primerNombre}</p>
+                <p className={`text-[11px] ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-500"}`}>¡Bienvenido/a!</p>
+                <p className={`font-bold text-sm ${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"}`}>{primerNombre}</p>
               </div>
 
-              <RiArrowDownSLine className={`text-lg text-[#165c36] transition-transform ${openUserMenu ? "rotate-180" : ""}`} />
+              <RiArrowDownSLine className={`text-lg transition-transform ${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} ${openUserMenu ? "rotate-180" : ""}`} />
             </button>
 
             {openUserMenu && (
-              <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden">
+              <div className={`absolute right-0 mt-3 w-56 ${tema === "oscuro" ? "bg-gray-800 border-gray-700" : tema === "alto" ? "bg-black border-yellow-500" : "bg-white border-gray-200"} border rounded-xl shadow-lg z-50 overflow-hidden`}>
                 <button
                   onClick={() => {
                     setOpenUserMenu(false);
                     navigate("/perfil");
                   }}
-                  className="w-full text-left px-4 py-3 hover:bg-gray-100 flex items-center gap-3 text-[#343A40]"
+                  className={`w-full text-left px-4 py-3 flex items-center gap-3 ${tema === "alto" ? "text-yellow-400 hover:bg-gray-900" : tema === "oscuro" ? "text-white hover:bg-gray-700" : "text-[#343A40] hover:bg-gray-100"}`}
                 >
-                  <RiUser3Line className="text-[#165c36] text-lg" />
+                  <RiUser3Line className={`text-lg ${tema === "alto" ? "text-yellow-400" : "text-[#165c36]"}`} />
                   Mi Perfil
                 </button>
 
                 <button
                   onClick={cerrarSesion}
-                  className="w-full text-left px-4 py-3 hover:bg-red-50 flex items-center gap-3 text-red-700 border-t border-gray-100"
+                  className={`w-full text-left px-4 py-3 flex items-center gap-3 text-red-600 border-t ${tema === "oscuro" ? "border-gray-700 hover:bg-red-950" : tema === "alto" ? "border-yellow-700 hover:bg-red-950" : "border-gray-100 hover:bg-red-50"}`}
                 >
                   <RiLogoutBoxRLine className="text-lg" />
                   Cerrar Sesión
@@ -203,39 +211,37 @@ const Dashboard = () => {
 
       <main className="flex-1 px-6 py-10">
         <section className="max-w-6xl mx-auto space-y-8">
-          <div className="bg-gradient-to-r from-white to-green-50 border border-gray-200 rounded-3xl p-8 shadow-sm overflow-hidden">
+          <div className={`${tema === "oscuro" ? "bg-gray-800 border-gray-700" : tema === "alto" ? "bg-black border-yellow-500" : "bg-gradient-to-r from-white to-green-50 border-gray-200"} border rounded-3xl p-8 shadow-sm overflow-hidden`}>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <span className="inline-flex items-center gap-2 bg-white text-[#165c36] px-4 py-2 rounded-full font-bold text-sm mb-4 border border-green-100 shadow-sm">
+                <span className={`inline-flex items-center gap-2 ${tema === "alto" ? "bg-black text-yellow-400 border-yellow-500" : tema === "oscuro" ? "bg-gray-700 text-white border-gray-600" : "bg-white text-[#165c36] border-green-100"} px-4 py-2 rounded-full font-bold text-sm mb-4 border shadow-sm`}>
                   <RiShieldCheckLine />
                   Plataforma inclusiva
                 </span>
 
-                <p className="text-sm uppercase tracking-widest text-[#165c36] font-bold mb-2">
+                <p className={`text-sm uppercase tracking-widest ${tema === "alto" ? "text-yellow-400" : "text-[#165c36]"} font-bold mb-2`}>
                   Sistema Inclusivo de Comunicación y Accesibilidad
                 </p>
 
-                <h1 className="text-5xl font-extrabold text-[#165c36] mb-4 leading-tight">
-                  Bienvenido a SINCA
+                <h1 className={`text-5xl font-extrabold ${tema === "alto" ? "text-yellow-400" : "text-[#165c36]"} mb-4 leading-tight`}>
+                  ¡Bienvenid@{primerNombre ? ` ${primerNombre}` : ""} a SINCA!
                 </h1>
 
-                <p className="text-[#343A40] text-lg mb-6 max-w-xl">
-                  Una plataforma inclusiva diseñada para mejorar la
-                  comunicación y el acceso a la información de personas con
-                  discapacidad visual, auditiva, motora y adultos mayores.
+                <p className={`${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-300" : "text-[#343A40]"} text-lg mb-6 max-w-xl`}>
+                  Una plataforma inclusiva diseñada para mejorar la comunicación y el acceso a la información de personas con discapacidad visual, auditiva, motora y adultos mayores.
                 </p>
 
                 <div className="flex flex-wrap gap-3">
                   <button
                     onClick={() => navigate("/accesibilidad")}
-                    className="bg-[#165c36] text-white px-6 py-3 rounded-xl font-bold hover:bg-[#27500A] transition"
+                    className={`${tema === "alto" ? "bg-yellow-400 text-black" : "bg-[#165c36] text-white"} px-6 py-3 rounded-xl font-bold hover:bg-[#27500A] transition`}
                   >
                     Configurar accesibilidad
                   </button>
 
                   <button
                     onClick={() => navigate("/multimedia")}
-                    className="bg-white text-[#165c36] px-6 py-3 rounded-xl font-bold border border-[#165c36] hover:bg-green-50 transition"
+                    className={`${tema === "alto" ? "bg-black text-yellow-400 border-yellow-400" : tema === "oscuro" ? "bg-gray-800 text-white border-gray-600" : "bg-white text-[#165c36] border-[#165c36]"} px-6 py-3 rounded-xl font-bold border hover:bg-green-50 transition`}
                   >
                     Ir a multimedia
                   </button>
@@ -243,7 +249,7 @@ const Dashboard = () => {
               </div>
 
               <div className="flex justify-center">
-                <div className="bg-white rounded-full p-6 shadow-md border border-green-100">
+                <div className={`${tema === "alto" ? "bg-black border-yellow-500" : tema === "oscuro" ? "bg-gray-700 border-gray-600" : "bg-white border-green-100"} rounded-full p-6 shadow-md border`}>
                   <img
                     src={portadaImg}
                     alt="Ilustración de accesibilidad e inclusión digital"
@@ -258,7 +264,7 @@ const Dashboard = () => {
             {beneficios.map((item) => (
               <div
                 key={item.titulo}
-                className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm flex items-center gap-4"
+                className={`${tema === "oscuro" ? "bg-gray-800 border-gray-700" : tema === "alto" ? "bg-black border-yellow-500" : "bg-white border-gray-200"} rounded-2xl border p-5 shadow-sm flex items-center gap-4`}
               >
                 <img
                   src={item.imagen}
@@ -267,37 +273,39 @@ const Dashboard = () => {
                 />
 
                 <div>
-                  <h3 className="font-bold text-black">{item.titulo}</h3>
-                  <p className="text-sm text-gray-600">{item.descripcion}</p>
+                  <h3 className={`font-bold ${tema === "alto" ? "text-yellow-400" : "text-black"}`}>{item.titulo}</h3>
+                  <p className={`text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-600"}`}>{item.descripcion}</p>
                 </div>
               </div>
             ))}
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold text-black mb-2">
+            <h2 className={`text-2xl font-bold ${tema === "alto" ? "text-yellow-400" : "text-black"} mb-2`}>
               Módulos principales
             </h2>
-            <p className="text-gray-600 mb-5">
+            <p className={`${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-600"} mb-5`}>
               Elige una herramienta para comenzar a usar SINCA.
             </p>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {modulos.map((modulo) => (
                 <button
                   key={modulo.ruta}
                   onClick={() => navigate(modulo.ruta)}
-                  className="bg-white border border-gray-200 rounded-2xl p-6 text-left shadow-sm hover:border-[#0056B3] hover:shadow-lg hover:-translate-y-1 transition"
+                  className={`${tema === "oscuro" ? "bg-gray-800 border-gray-700" : tema === "alto" ? "bg-black border-yellow-500" : "bg-white border-gray-200"} border rounded-2xl p-6 text-left shadow-sm hover:border-[#0056B3] hover:shadow-lg hover:-translate-y-1 transition`}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-green-50 text-[#165c36] flex items-center justify-center text-3xl mb-4">
+                  <div className={`w-12 h-12 rounded-xl ${tema === "alto" ? "bg-black border-yellow-500" : tema === "oscuro" ? "bg-gray-700" : "bg-green-50"} text-[#165c36] flex items-center justify-center text-3xl mb-4`}>
                     {modulo.icono}
                   </div>
 
-                  <h3 className="text-lg font-bold text-black mb-2">
+                  <h3 className={`text-lg font-bold ${tema === "alto" ? "text-yellow-400" : "text-black"} mb-2`}>
                     {modulo.titulo}
                   </h3>
 
-                  <p className="text-sm text-gray-600">{modulo.descripcion}</p>
+                  <p className={`text-sm ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-600"}`}>
+                    {modulo.descripcion}
+                  </p>
                 </button>
               ))}
             </div>

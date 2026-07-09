@@ -14,41 +14,36 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 1. Esto es lo que crea el usuario en Firebase (y ya lo hace bien)
+      // 1. Creamos el usuario en Firebase
       const credencial = await createUserWithEmailAndPassword(
         auth,
         correo,
         contraseña
       );
-      
-      // Guardar el nombre del usuario
+
+      // 2. Guardamos el nombre en su perfil de Firebase
       await updateProfile(credencial.user, {
         displayName: nombre,
       });
-      
-      // 2. Si llega aquí, es que SÍ se creó. 
-      // ¡No llames al alert de error! 
+
       alert("¡Cuenta creada exitosamente!");
-      
-      // 3. Redirige al usuario al Login o al Home
-      navigate('/login'); 
+      navigate('/login');
     } catch (error) {
-      // Solo entra aquí si realmente hubo un error (ej. contraseña muy corta)
       console.error(error);
-      
+
       switch (error.code) {
         case "auth/email-already-in-use":
           alert("Este correo ya está registrado.");
           break;
-          
+
         case "auth/weak-password":
           alert("La contraseña debe tener al menos 6 caracteres.");
           break;
-          
+
         case "auth/invalid-email":
           alert("El correo electrónico no es válido.");
           break;
-        
+
         default:
           alert("Hubo un error al registrarte.");
       }
@@ -57,8 +52,6 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col font-sans">
-      
-      {/* HEADER COMPACTO */}
       <header className="flex justify-between items-center px-8 py-3 border-b-2 border-[#165c36]">
         <div className="text-[#165c36] font-bold text-xl flex items-center gap-2">
           <Link to="/home">
@@ -70,55 +63,50 @@ function Register() {
         </button>
       </header>
 
-      {/* CONTENEDOR CENTRAL COMPACTO */}
       <main className="flex-1 flex items-center justify-center p-6 bg-gray-50">
-        
-        {/* CAJA VERDE AJUSTADA */}
         <div className="bg-[#165c36] w-[450px] max-w-[95vw] h-auto rounded-[30px] p-10 shadow-2xl flex flex-col justify-center">
-          
           <div className="text-center mb-6">
             <div className="text-white text-6xl mb-2 flex justify-center">❉</div>
             <h2 className="text-white text-3xl font-extrabold tracking-wide">Registrarse</h2>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 w-full px-2">
-            
             <div className="w-full">
               <label className="block text-white text-sm font-semibold mb-1 ml-4">Nombre completo:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className="w-full h-12 bg-white text-gray-900 rounded-full px-6 text-base outline-none focus:ring-4 focus:ring-green-300 transition-all box-border placeholder:text-gray-400"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder="Juan Pérez"
-                required 
+                required
               />
             </div>
 
             <div className="w-full">
               <label className="block text-white text-sm font-semibold mb-1 ml-4">Correo electrónico:</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 className="w-full h-12 bg-white text-gray-900 rounded-full px-6 text-base outline-none focus:ring-4 focus:ring-green-300 transition-all box-border placeholder:text-gray-400"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 placeholder="ejemplo@correo.com"
-                required 
+                required
               />
             </div>
 
             <div className="w-full">
               <label className="block text-white text-sm font-semibold mb-1 ml-4">Contraseña:</label>
               <div className="relative w-full">
-                <input 
-                  type={showPassword ? "text" : "password"} 
+                <input
+                  type={showPassword ? "text" : "password"}
                   className="w-full h-12 bg-white text-gray-900 rounded-full px-6 text-base outline-none pr-12 focus:ring-4 focus:ring-green-300 transition-all box-border placeholder:text-gray-400"
                   value={contraseña}
                   onChange={(e) => setContraseña(e.target.value)}
                   placeholder="••••••••"
-                  required 
+                  required
                 />
-                <button 
+                <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 transition-colors p-1"
@@ -139,7 +127,6 @@ function Register() {
             <span className="opacity-90">¿Ya tienes cuenta?</span>
             <Link to="/login" className="hover:underline font-bold text-base">Iniciar Sesión</Link>
           </div>
-
         </div>
       </main>
     </div>
