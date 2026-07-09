@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase'; 
+import { signOut, onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 import { useAccessibility } from "../hooks/useAccessibility";
+import { getEmojiPorFoto } from "../avatares";
 
 import {
   RiArrowDownSLine,
@@ -11,7 +12,8 @@ import {
   RiMicLine,
   RiMovieLine,
   RiShieldCheckLine,
-  RiHandCoinLine
+  RiUser3Line,
+  RiHandCoinLine,
 } from "react-icons/ri";
 
 import portadaImg from "../assets/portada.jpg";
@@ -23,7 +25,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const { tema } = useAccessibility();
   const [openMenu, setOpenMenu] = useState(false);
-  const [nombreUsuario, setNombreUsuario] = useState('');
+  const [openUserMenu, setOpenUserMenu] = useState(false);
+  const [usuario, setUsuario] = useState({ nombre: "", foto: "" });
 
   const temaClases = {
     normal: "bg-[#F4F5F7] text-[#343A40]",
@@ -34,25 +37,28 @@ const Dashboard = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        navigate('/login', { replace: true });
+        navigate("/login", { replace: true });
       } else {
-        const nombreCompleto = user.displayName;
-        const primerNombre = nombreCompleto ? nombreCompleto.split(' ')[0] : '';
-        setNombreUsuario(primerNombre);
+        setUsuario({
+          nombre: user.displayName || "Usuario SINCA",
+          foto: user.photoURL || "",
+        });
       }
     });
-
     return () => unsubscribe();
   }, [navigate]);
 
-  const handleLogout = async () => {
+  const cerrarSesion = async () => {
     try {
       await signOut(auth);
-      navigate('/login', { replace: true });
+      navigate("/login", { replace: true });
     } catch (error) {
       console.error("Error al cerrar sesión:", error.message);
     }
   };
+
+  const emojiActual = getEmojiPorFoto(usuario.foto);
+  const primerNombre = usuario.nombre.split(" ")[0];
 
   const irModulo = (ruta) => {
     setOpenMenu(false);
@@ -82,8 +88,8 @@ const Dashboard = () => {
       titulo: "Traductor 3D",
       descripcion:
         "Escribe un texto y un avatar 3D lo traducirá a lenguaje de señas en tiempo real.",
-      icono: <RiHandCoinLine />, 
-      ruta: "/traductor", // 👈 Asegúrate de que diga solo /traductor
+      icono: <RiHandCoinLine />,
+      ruta: "/traductor",
     },
   ];
 
@@ -113,14 +119,19 @@ const Dashboard = () => {
           SINCA
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
+
+          {/* MENÚ DE MÓDULOS */}
           <div className="relative">
             <button
-              onClick={() => setOpenMenu(!openMenu)}
+              onClick={() => {
+                setOpenMenu(!openMenu);
+                setOpenUserMenu(false);
+              }}
               className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold hover:underline flex items-center gap-1`}
             >
               Módulos
-              <RiArrowDownSLine className="text-xl" />
+              <RiArrowDownSLine className={`text-xl transition-transform ${openMenu ? "rotate-180" : ""}`} />
             </button>
 
             {openMenu && (
@@ -141,13 +152,60 @@ const Dashboard = () => {
             )}
           </div>
 
-          <button
-            onClick={handleLogout}
-            className={`${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} font-bold hover:underline flex items-center gap-1`}
-          >
-            <RiLogoutBoxRLine />
-            Cerrar Sesión
-          </button>
+          {/* DIVISOR */}
+          <div className={`w-px h-8 ${tema === "oscuro" ? "bg-gray-700" : tema === "alto" ? "bg-yellow-600" : "bg-gray-200"}`} />
+
+          {/* MENÚ DE USUARIO */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                setOpenUserMenu(!openUserMenu);
+                setOpenMenu(false);
+              }}
+              className={`flex items-center gap-3 pl-2 pr-3 py-1.5 rounded-full transition ${tema === "oscuro" ? "hover:bg-gray-800" : tema === "alto" ? "hover:bg-gray-900" : "hover:bg-green-50"}`}
+            >
+              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#165c36] flex items-center justify-center bg-green-50 shrink-0">
+                {emojiActual ? (
+                  <span className="text-xl">{emojiActual}</span>
+                ) : usuario.foto ? (
+                  <img src={usuario.foto} alt="Foto de perfil" className="w-full h-full object-cover" />
+                ) : (
+                  <RiUser3Line className="text-lg text-[#165c36]" />
+                )}
+              </div>
+
+              <div className="leading-tight hidden sm:block text-left">
+                <p className={`text-[11px] ${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-400" : "text-gray-500"}`}>¡Bienvenido/a!</p>
+                <p className={`font-bold text-sm ${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"}`}>{primerNombre}</p>
+              </div>
+
+              <RiArrowDownSLine className={`text-lg transition-transform ${tema === "alto" ? "text-yellow-400" : tema === "oscuro" ? "text-white" : "text-[#165c36]"} ${openUserMenu ? "rotate-180" : ""}`} />
+            </button>
+
+            {openUserMenu && (
+              <div className={`absolute right-0 mt-3 w-56 ${tema === "oscuro" ? "bg-gray-800 border-gray-700" : tema === "alto" ? "bg-black border-yellow-500" : "bg-white border-gray-200"} border rounded-xl shadow-lg z-50 overflow-hidden`}>
+                <button
+                  onClick={() => {
+                    setOpenUserMenu(false);
+                    navigate("/perfil");
+                  }}
+                  className={`w-full text-left px-4 py-3 flex items-center gap-3 ${tema === "alto" ? "text-yellow-400 hover:bg-gray-900" : tema === "oscuro" ? "text-white hover:bg-gray-700" : "text-[#343A40] hover:bg-gray-100"}`}
+                >
+                  <RiUser3Line className={`text-lg ${tema === "alto" ? "text-yellow-400" : "text-[#165c36]"}`} />
+                  Mi Perfil
+                </button>
+
+                <button
+                  onClick={cerrarSesion}
+                  className={`w-full text-left px-4 py-3 flex items-center gap-3 text-red-600 border-t ${tema === "oscuro" ? "border-gray-700 hover:bg-red-950" : tema === "alto" ? "border-yellow-700 hover:bg-red-950" : "border-gray-100 hover:bg-red-50"}`}
+                >
+                  <RiLogoutBoxRLine className="text-lg" />
+                  Cerrar Sesión
+                </button>
+              </div>
+            )}
+          </div>
+
         </div>
       </header>
 
@@ -166,7 +224,7 @@ const Dashboard = () => {
                 </p>
 
                 <h1 className={`text-5xl font-extrabold ${tema === "alto" ? "text-yellow-400" : "text-[#165c36]"} mb-4 leading-tight`}>
-                  ¡Bienvenid@{nombreUsuario ? ` ${nombreUsuario}` : ''} a SINCA!
+                  ¡Bienvenid@{primerNombre ? ` ${primerNombre}` : ""} a SINCA!
                 </h1>
 
                 <p className={`${tema === "alto" ? "text-yellow-300" : tema === "oscuro" ? "text-gray-300" : "text-[#343A40]"} text-lg mb-6 max-w-xl`}>
