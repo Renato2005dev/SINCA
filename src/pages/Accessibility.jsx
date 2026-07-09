@@ -1,4 +1,4 @@
-import { RiArrowLeftLine, RiBrainLine, RiClosedCaptioningFill, RiContrastFill, RiMoonFill, RiQrScanLine, RiRefreshLine, RiSunLine } from "react-icons/ri";
+import { RiArrowLeftLine, RiBrainLine, RiContrastFill, RiMoonFill, RiQrScanLine, RiRefreshLine, RiSunLine } from "react-icons/ri";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccessibility } from "../hooks/useAccessibility";
@@ -23,8 +23,6 @@ const Accessibility = () => {
     cambiarTema, 
     fontSize, 
     cambiarFontSize,
-    subtitulos,
-    cambiarSubtitulos,
     modoSimple,
     cambiarModoSimple,
     readingMask,
@@ -46,9 +44,6 @@ const Accessibility = () => {
     cambiarTema(nuevoTema);
   };
 
-  const handleSubtitulosChange = (valor) => {
-    cambiarSubtitulos(valor);
-  };
 
   const handleModoChange = (valor) => {
     cambiarModoSimple(valor);
@@ -164,18 +159,7 @@ const Accessibility = () => {
             </div>
           </div>
 
-          <div className={`border rounded-xl p-5 ${card}`}>
-            <h2 className="text-sm font-semibold mb-3 text-[#27500A]">Subtítulos Automático</h2>
-            <div className="flex items-center gap-3">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${tema === "normal" ? "bg-green-100" : "bg-green-700"}`}>
-                <RiClosedCaptioningFill className={`w-5 h-5 ${textMuted}`} />
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold">Activar subtítulos</p>
-              </div>
-              <Toggle checked={subtitulos} onChange={handleSubtitulosChange} />
-            </div>
-          </div>
+          
 
           <div className={`border rounded-xl p-5 ${card}`}>
             <h2 className="text-sm font-semibold mb-3 text-[#27500A]">Modo cognitivo simplificado</h2>
