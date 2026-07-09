@@ -27,7 +27,6 @@ const Dashboard = () => {
   const { tema, modoSimple } = useAccessibility();
 
   const [openMenu, setOpenMenu] = useState(false);
-  /*const [openPerfil, setOpenPerfil] = useState(false);*/
   const [nombreUsuario, setNombreUsuario] = useState("");
 
   const temaClases = {
@@ -105,29 +104,6 @@ const Dashboard = () => {
       imagen: transcripcionImg,
     },
   ];
-  /*
-  const perfiles = [
-    {
-      nombre: "Visión Baja",
-      icono: <RiEyeOffLine />,
-      destacado: false,
-    },
-    {
-      nombre: "Dislexia",
-      icono: "ꓯ?",
-      destacado: false,
-    },
-    {
-      nombre: "TDHA",
-      icono: <RiBrain2Line />,
-      destacado: false,
-    },
-    {
-      nombre: "Daltonismo",
-      icono: <RiContrastFill />,
-      destacado: false,
-    },
-  ];*/
 
   const pasos = [
     {
@@ -190,23 +166,7 @@ const Dashboard = () => {
       `}
     </style>
   );
-  //perfiles
-  const botonesFlotantes = (
-    <div className="fixed bottom-6 right-6 z-50">
-      <button
-        type="button"
-        onClick={() => navigate("/asistente")}
-        className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-transform duration-300 hover:scale-110 ${
-          tema === "alto"
-            ? "bg-yellow-400 text-black"
-            : "bg-[#12492F] text-white shadow-[#12492F]/35"
-        }`}
-      >
-        <span className="absolute inset-0 rounded-full border-2 border-[#6CC28E] sinca-ring"></span>
-        <RiMicLine className="text-2xl relative z-10" />
-      </button>
-    </div>
-  );
+  
 
   /* DISEÑO NORMAL: cuando el modo simplificado está DESACTIVADO */
   if (!modoSimple) {
@@ -343,7 +303,7 @@ const Dashboard = () => {
                 ? "bg-black border border-yellow-500"
                 : tema === "oscuro"
                   ? "bg-gray-900 border border-gray-700"
-                  : "bg-gradient-to-br from-[#EAF6EE] to-white shadow-[#12492F]/5"
+                  : "bg-linear-to-br from-[#EAF6EE] to-white shadow-[#12492F]/5"
             }`}
           >
             <div>
@@ -780,8 +740,6 @@ const Dashboard = () => {
             </p>
           </div>
         </footer>
-
-        {botonesFlotantes}
       </div>
     );
   }
@@ -1118,8 +1076,6 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
-
-      {botonesFlotantes}
     </div>
   );
 };
