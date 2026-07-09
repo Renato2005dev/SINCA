@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { useAccessibility } from "../hooks/useAccessibility";
+import { getEmojiPorFoto } from "../avatares";
 
 import {
   RiArrowDownSLine,
@@ -15,6 +16,8 @@ import {
   RiTeamFill,
   RiEyeLine,
   RiVolumeUpFill,
+  RiUser3Line,
+  RiHandCoinLine,
 } from "react-icons/ri";
 
 import portadaImg from "../assets/portada.jpg";
@@ -27,7 +30,8 @@ const Dashboard = () => {
   const { tema, modoSimple } = useAccessibility();
 
   const [openMenu, setOpenMenu] = useState(false);
-  const [nombreUsuario, setNombreUsuario] = useState("");
+  const [openUserMenu, setOpenUserMenu] = useState(false);
+  const [usuario, setUsuario] = useState({ nombre: "", foto: "" });
 
   const temaClases = {
     normal: "bg-[#F4F5F7] text-[#343A40]",
@@ -40,16 +44,16 @@ const Dashboard = () => {
       if (!user) {
         navigate("/login", { replace: true });
       } else {
-        const nombreCompleto = user.displayName;
-        const primerNombre = nombreCompleto ? nombreCompleto.split(" ")[0] : "";
-        setNombreUsuario(primerNombre);
+        setUsuario({
+          nombre: user.displayName || "Usuario SINCA",
+          foto: user.photoURL || "",
+        });
       }
     });
-
     return () => unsubscribe();
   }, [navigate]);
 
-  const handleLogout = async () => {
+  const cerrarSesion = async () => {
     try {
       await signOut(auth);
       navigate("/login", { replace: true });
@@ -58,8 +62,12 @@ const Dashboard = () => {
     }
   };
 
+  const emojiActual = getEmojiPorFoto(usuario.foto);
+  const primerNombre = usuario.nombre.split(" ")[0];
+
   const irModulo = (ruta) => {
     setOpenMenu(false);
+    setOpenUserMenu(false);
     navigate(ruta);
   };
 
@@ -84,6 +92,13 @@ const Dashboard = () => {
         "Trabaja con subtítulos, transcripciones y contenido audiovisual accesible.",
       icono: <RiMovieLine />,
       ruta: "/multimedia",
+    },
+    {
+      titulo: "Traductor 3D",
+      descripcion:
+        "Escribe un texto y un avatar 3D lo traducirá a lenguaje de señas en tiempo real.",
+      icono: <RiHandCoinLine />,
+      ruta: "/traductor",
     },
   ];
 
@@ -271,19 +286,150 @@ const Dashboard = () => {
                 )}
               </div>
 
-              <button
-                onClick={handleLogout}
-                className={`flex items-center gap-1.5 text-sm font-semibold border rounded-xl px-4 py-2 transition-all duration-300 hover:-translate-y-0.5 ${
-                  tema === "alto"
-                    ? "text-yellow-400 border-yellow-500 hover:bg-yellow-400 hover:text-black"
-                    : tema === "oscuro"
-                      ? "text-white border-gray-600 hover:bg-white hover:text-black"
-                      : "text-[#12492F] border-[#12492F]/25 hover:bg-[#12492F] hover:text-white"
+              <div
+                className={`hidden sm:block w-px h-8 ${
+                  tema === "oscuro"
+                    ? "bg-gray-700"
+                    : tema === "alto"
+                      ? "bg-yellow-600"
+                      : "bg-[#12492F]/15"
                 }`}
-              >
-                <RiLogoutBoxRLine />
-                <span className="hidden sm:inline">Cerrar sesión</span>
-              </button>
+              />
+
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpenUserMenu(!openUserMenu);
+                    setOpenMenu(false);
+                  }}
+                  className={`flex items-center gap-3 pl-2 pr-3 py-1.5 rounded-full transition ${
+                    tema === "oscuro"
+                      ? "hover:bg-gray-800"
+                      : tema === "alto"
+                        ? "hover:bg-gray-900"
+                        : "hover:bg-[#EAF6EE]"
+                  }`}
+                >
+                  <div
+                    className={`w-9 h-9 rounded-full overflow-hidden border-2 flex items-center justify-center shrink-0 ${
+                      tema === "alto"
+                        ? "border-yellow-500 bg-black"
+                        : tema === "oscuro"
+                          ? "border-gray-600 bg-gray-800"
+                          : "border-[#12492F] bg-[#EAF6EE]"
+                    }`}
+                  >
+                    {emojiActual ? (
+                      <span className="text-xl">{emojiActual}</span>
+                    ) : usuario.foto ? (
+                      <img
+                        src={usuario.foto}
+                        alt="Foto de perfil"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <RiUser3Line
+                        className={`text-lg ${
+                          tema === "alto"
+                            ? "text-yellow-400"
+                            : tema === "oscuro"
+                              ? "text-white"
+                              : "text-[#12492F]"
+                        }`}
+                      />
+                    )}
+                  </div>
+
+                  <div className="leading-tight hidden md:block text-left">
+                    <p
+                      className={`text-[11px] ${
+                        tema === "alto"
+                          ? "text-yellow-300"
+                          : tema === "oscuro"
+                            ? "text-gray-400"
+                            : "text-gray-500"
+                      }`}
+                    >
+                      ¡Bienvenido/a!
+                    </p>
+                    <p
+                      className={`font-bold text-sm ${
+                        tema === "alto"
+                          ? "text-yellow-400"
+                          : tema === "oscuro"
+                            ? "text-white"
+                            : "text-[#12492F]"
+                      }`}
+                    >
+                      {primerNombre}
+                    </p>
+                  </div>
+
+                  <RiArrowDownSLine
+                    className={`text-lg transition-transform ${
+                      tema === "alto"
+                        ? "text-yellow-400"
+                        : tema === "oscuro"
+                          ? "text-white"
+                          : "text-[#12492F]"
+                    } ${openUserMenu ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                {openUserMenu && (
+                  <div
+                    className={`absolute right-0 mt-3 w-56 border rounded-xl shadow-lg z-50 overflow-hidden ${
+                      tema === "oscuro"
+                        ? "bg-gray-900 border-gray-700"
+                        : tema === "alto"
+                          ? "bg-black border-yellow-500"
+                          : "bg-white border-gray-200"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpenUserMenu(false);
+                        navigate("/perfil");
+                      }}
+                      className={`w-full text-left px-4 py-3 flex items-center gap-3 ${
+                        tema === "alto"
+                          ? "text-yellow-400 hover:bg-gray-900"
+                          : tema === "oscuro"
+                            ? "text-white hover:bg-gray-800"
+                            : "text-[#343A40] hover:bg-gray-100"
+                      }`}
+                    >
+                      <RiUser3Line
+                        className={`text-lg ${
+                          tema === "alto"
+                            ? "text-yellow-400"
+                            : tema === "oscuro"
+                              ? "text-white"
+                              : "text-[#12492F]"
+                        }`}
+                      />
+                      Mi Perfil
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={cerrarSesion}
+                      className={`w-full text-left px-4 py-3 flex items-center gap-3 text-red-600 border-t ${
+                        tema === "oscuro"
+                          ? "border-gray-700 hover:bg-red-950"
+                          : tema === "alto"
+                            ? "border-yellow-700 hover:bg-red-950"
+                            : "border-gray-100 hover:bg-red-50"
+                      }`}
+                    >
+                      <RiLogoutBoxRLine className="text-lg" />
+                      Cerrar Sesión
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </header>
@@ -303,7 +449,7 @@ const Dashboard = () => {
                 ? "bg-black border border-yellow-500"
                 : tema === "oscuro"
                   ? "bg-gray-900 border border-gray-700"
-                  : "bg-linear-to-br from-[#EAF6EE] to-white shadow-[#12492F]/5"
+                  : "bg-gradient-to-br from-[#EAF6EE] to-white shadow-[#12492F]/5"
             }`}
           >
             <div>
@@ -337,7 +483,7 @@ const Dashboard = () => {
                       : "text-[#0B2F1E]"
                 }`}
               >
-                ¡Bienvenid@{nombreUsuario ? ` ${nombreUsuario}` : ""} a SINCA!
+                ¡Bienvenid@{primerNombre ? ` ${primerNombre}` : ""} a SINCA!
               </h1>
 
               <p
@@ -573,7 +719,7 @@ const Dashboard = () => {
                       : "bg-white border-transparent hover:shadow-2xl hover:shadow-[#12492F]/15 hover:border-[#3F9A66]/30"
                 }`}
               >
-                <span className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-[#3F9A66] to-[#F2A93B] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100"></span>
+                <span className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#3F9A66] to-[#F2A93B] scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100"></span>
 
                 <div className="w-14 h-14 rounded-2xl bg-[#EAF6EE] text-[#3F9A66] flex items-center justify-center mb-5 text-3xl transition-transform duration-300 group-hover:scale-110">
                   {modulo.icono}
@@ -775,10 +921,15 @@ const Dashboard = () => {
           SINCA
         </div>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
+
+          {/* MENÚ DE MÓDULOS */}
           <div className="relative">
             <button
-              onClick={() => setOpenMenu(!openMenu)}
+              onClick={() => {
+                setOpenMenu(!openMenu);
+                setOpenUserMenu(false);
+              }}
               className={`${
                 tema === "alto"
                   ? "text-yellow-400"
@@ -788,7 +939,7 @@ const Dashboard = () => {
               } font-bold hover:underline flex items-center gap-1`}
             >
               Módulos
-              <RiArrowDownSLine className="text-xl" />
+              <RiArrowDownSLine className={`text-xl transition-transform ${openMenu ? "rotate-180" : ""}`} />
             </button>
 
             {openMenu && (
@@ -827,19 +978,129 @@ const Dashboard = () => {
             )}
           </div>
 
-          <button
-            onClick={handleLogout}
-            className={`${
-              tema === "alto"
-                ? "text-yellow-400"
-                : tema === "oscuro"
-                  ? "text-white"
-                  : "text-[#165c36]"
-            } font-bold hover:underline flex items-center gap-1`}
-          >
-            <RiLogoutBoxRLine />
-            Cerrar Sesión
-          </button>
+          {/* DIVISOR */}
+          <div
+            className={`w-px h-8 ${
+              tema === "oscuro"
+                ? "bg-gray-700"
+                : tema === "alto"
+                  ? "bg-yellow-600"
+                  : "bg-gray-200"
+            }`}
+          />
+
+          {/* MENÚ DE USUARIO */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                setOpenUserMenu(!openUserMenu);
+                setOpenMenu(false);
+              }}
+              className={`flex items-center gap-3 pl-2 pr-3 py-1.5 rounded-full transition ${
+                tema === "oscuro"
+                  ? "hover:bg-gray-800"
+                  : tema === "alto"
+                    ? "hover:bg-gray-900"
+                    : "hover:bg-green-50"
+              }`}
+            >
+              <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#165c36] flex items-center justify-center bg-green-50 shrink-0">
+                {emojiActual ? (
+                  <span className="text-xl">{emojiActual}</span>
+                ) : usuario.foto ? (
+                  <img
+                    src={usuario.foto}
+                    alt="Foto de perfil"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <RiUser3Line className="text-lg text-[#165c36]" />
+                )}
+              </div>
+
+              <div className="leading-tight hidden sm:block text-left">
+                <p
+                  className={`text-[11px] ${
+                    tema === "alto"
+                      ? "text-yellow-300"
+                      : tema === "oscuro"
+                        ? "text-gray-400"
+                        : "text-gray-500"
+                  }`}
+                >
+                  ¡Bienvenido/a!
+                </p>
+                <p
+                  className={`font-bold text-sm ${
+                    tema === "alto"
+                      ? "text-yellow-400"
+                      : tema === "oscuro"
+                        ? "text-white"
+                        : "text-[#165c36]"
+                  }`}
+                >
+                  {primerNombre}
+                </p>
+              </div>
+
+              <RiArrowDownSLine
+                className={`text-lg transition-transform ${
+                  tema === "alto"
+                    ? "text-yellow-400"
+                    : tema === "oscuro"
+                      ? "text-white"
+                      : "text-[#165c36]"
+                } ${openUserMenu ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {openUserMenu && (
+              <div
+                className={`absolute right-0 mt-3 w-56 border rounded-xl shadow-lg z-50 overflow-hidden ${
+                  tema === "oscuro"
+                    ? "bg-gray-800 border-gray-700"
+                    : tema === "alto"
+                      ? "bg-black border-yellow-500"
+                      : "bg-white border-gray-200"
+                }`}
+              >
+                <button
+                  onClick={() => {
+                    setOpenUserMenu(false);
+                    navigate("/perfil");
+                  }}
+                  className={`w-full text-left px-4 py-3 flex items-center gap-3 ${
+                    tema === "alto"
+                      ? "text-yellow-400 hover:bg-gray-900"
+                      : tema === "oscuro"
+                        ? "text-white hover:bg-gray-700"
+                        : "text-[#343A40] hover:bg-gray-100"
+                  }`}
+                >
+                  <RiUser3Line
+                    className={`text-lg ${
+                      tema === "alto" ? "text-yellow-400" : "text-[#165c36]"
+                    }`}
+                  />
+                  Mi Perfil
+                </button>
+
+                <button
+                  onClick={cerrarSesion}
+                  className={`w-full text-left px-4 py-3 flex items-center gap-3 text-red-600 border-t ${
+                    tema === "oscuro"
+                      ? "border-gray-700 hover:bg-red-950"
+                      : tema === "alto"
+                        ? "border-yellow-700 hover:bg-red-950"
+                        : "border-gray-100 hover:bg-red-50"
+                  }`}
+                >
+                  <RiLogoutBoxRLine className="text-lg" />
+                  Cerrar Sesión
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -851,7 +1112,7 @@ const Dashboard = () => {
                 ? "bg-gray-800 border-gray-700"
                 : tema === "alto"
                   ? "bg-black border-yellow-500"
-                  : "bg-linear-to-r from-white to-green-50 border-gray-200"
+                  : "bg-gradient-to-r from-white to-green-50 border-gray-200"
             } border rounded-3xl p-8 shadow-sm overflow-hidden`}
           >
             <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -886,7 +1147,7 @@ const Dashboard = () => {
                         : "text-[#165c36]"
                   } mb-4 leading-tight`}
                 >
-                  ¡Bienvenid@{nombreUsuario ? ` ${nombreUsuario}` : ""} a SINCA!
+                  ¡Bienvenid@{primerNombre ? ` ${primerNombre}` : ""} a SINCA!
                 </h1>
 
                 <p

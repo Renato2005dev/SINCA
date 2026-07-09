@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// 👇 Importamos updateProfile para guardar el nombre
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'; 
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../firebase';
 import { RiArrowLeftLine, RiEyeOffLine, RiEyeLine } from 'react-icons/ri';
 
@@ -16,18 +15,38 @@ function Register() {
     e.preventDefault();
     try {
       // 1. Creamos el usuario en Firebase
-      const userCredential = await createUserWithEmailAndPassword(auth, correo, contraseña);
-      
-      // 👇 2. Guardamos el nombre en su perfil de Firebase
-      await updateProfile(userCredential.user, {
-        displayName: nombre
+      const credencial = await createUserWithEmailAndPassword(
+        auth,
+        correo,
+        contraseña
+      );
+
+      // 2. Guardamos el nombre en su perfil de Firebase
+      await updateProfile(credencial.user, {
+        displayName: nombre,
       });
-      
+
       alert("¡Cuenta creada exitosamente!");
-      navigate('/login'); 
+      navigate('/login');
     } catch (error) {
       console.error(error);
-      alert("Hubo un error al registrarte.");
+
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          alert("Este correo ya está registrado.");
+          break;
+
+        case "auth/weak-password":
+          alert("La contraseña debe tener al menos 6 caracteres.");
+          break;
+
+        case "auth/invalid-email":
+          alert("El correo electrónico no es válido.");
+          break;
+
+        default:
+          alert("Hubo un error al registrarte.");
+      }
     }
   };
 
@@ -54,40 +73,40 @@ function Register() {
           <form onSubmit={handleSubmit} className="space-y-4 w-full px-2">
             <div className="w-full">
               <label className="block text-white text-sm font-semibold mb-1 ml-4">Nombre completo:</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className="w-full h-12 bg-white text-gray-900 rounded-full px-6 text-base outline-none focus:ring-4 focus:ring-green-300 transition-all box-border placeholder:text-gray-400"
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder="Juan Pérez"
-                required 
+                required
               />
             </div>
 
             <div className="w-full">
               <label className="block text-white text-sm font-semibold mb-1 ml-4">Correo electrónico:</label>
-              <input 
-                type="email" 
+              <input
+                type="email"
                 className="w-full h-12 bg-white text-gray-900 rounded-full px-6 text-base outline-none focus:ring-4 focus:ring-green-300 transition-all box-border placeholder:text-gray-400"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 placeholder="ejemplo@correo.com"
-                required 
+                required
               />
             </div>
 
             <div className="w-full">
               <label className="block text-white text-sm font-semibold mb-1 ml-4">Contraseña:</label>
               <div className="relative w-full">
-                <input 
-                  type={showPassword ? "text" : "password"} 
+                <input
+                  type={showPassword ? "text" : "password"}
                   className="w-full h-12 bg-white text-gray-900 rounded-full px-6 text-base outline-none pr-12 focus:ring-4 focus:ring-green-300 transition-all box-border placeholder:text-gray-400"
                   value={contraseña}
                   onChange={(e) => setContraseña(e.target.value)}
                   placeholder="••••••••"
-                  required 
+                  required
                 />
-                <button 
+                <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900 transition-colors p-1"
